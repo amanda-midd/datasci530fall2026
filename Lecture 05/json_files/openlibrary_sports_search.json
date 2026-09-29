@@ -1,0 +1,3022 @@
+{
+    "numFound": 45549,
+    "start": 0,
+    "numFoundExact": true,
+    "num_found": 45549,
+    "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+    "q": "",
+    "offset": null,
+    "docs": [
+        {
+            "author_key": [
+                "OL27064A"
+            ],
+            "author_name": [
+                "Dick Francis"
+            ],
+            "cover_edition_key": "OL20941658M",
+            "cover_height": 3550,
+            "cover_i": 6688382,
+            "cover_width": 2029,
+            "ebook_access": "borrowable",
+            "edition_count": 45,
+            "first_publish_year": 1967,
+            "has_fulltext": true,
+            "ia": [
+                "bloodsport0000dick_r1f0",
+                "bloodsport0000dick",
+                "bloodsportharper0000dick",
+                "bloodsport0000fran_p1h8",
+                "bloodsport00dick",
+                "bloodshort0000unse",
+                "bloodsport00fran",
+                "bloodsport0000fran_p2h7",
+                "bloodsport0000fran"
+            ],
+            "ia_collection": [
+                "americana",
+                "delawarecountydistrictlibrary",
+                "inlibrary",
+                "internetarchivebooks",
+                "library_of_atlantis",
+                "openlibrary-d-ol",
+                "printdisabled",
+                "unb-ol"
+            ],
+            "key": "/works/OL463330W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL47837916M",
+            "lending_identifier_s": "bloodsport0000dick_r1f0",
+            "public_scan_b": false,
+            "title": "Blood sport"
+        },
+        {
+            "author_key": [
+                "OL22258A",
+                "OL10447468A"
+            ],
+            "author_name": [
+                "James Patterson",
+                "Valentina de Angelis"
+            ],
+            "cover_height": 577,
+            "cover_i": 6450803,
+            "cover_width": 388,
+            "ebook_access": "borrowable",
+            "edition_count": 34,
+            "first_publish_year": 1998,
+            "has_fulltext": true,
+            "ia": [
+                "savingworld0000patt",
+                "isbn_9780756983536",
+                "maximumridesavin0000patt",
+                "maximumridesavin00patt",
+                "savingworldother0000patt_j5n2",
+                "savingworldother0000patt_r4w1",
+                "isbn_9780786298877",
+                "savingworldother0000patt_z4w7",
+                "savingworldother0000patt_d3e6",
+                "savingworldother0000patt",
+                "savingworldother00patt"
+            ],
+            "ia_collection": [
+                "cnusd-ol",
+                "delawarecountydistrictlibrary-ol",
+                "denverpubliclibrary-ol",
+                "goffstownlibrary-ol",
+                "inlibrary",
+                "internetarchivebooks",
+                "miltonpubliclibrary-ol",
+                "openlibrary-d-ol",
+                "printdisabled",
+                "salisburyfreelibrary-ol",
+                "schoollibrary",
+                "spokanepubliclibrary-ol",
+                "stmaryscountylibrary",
+                "worthingtonlibraries-ol"
+            ],
+            "key": "/works/OL5337360W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL26443392M",
+            "lending_identifier_s": "savingworld0000patt",
+            "public_scan_b": false,
+            "title": "Saving the World and Other Extreme Sports"
+        },
+        {
+            "author_key": [
+                "OL3093442A"
+            ],
+            "author_name": [
+                "Editors of Sports Illustrated"
+            ],
+            "cover_edition_key": "OL9734507M",
+            "cover_i": 2130761,
+            "ebook_access": "borrowable",
+            "edition_count": 17,
+            "first_publish_year": 2001,
+            "has_fulltext": true,
+            "ia": [
+                "sportsillustrate00edit_1",
+                "exposure0000mazz",
+                "classicrivalries0000hers",
+                "sportsillustrate00edit_0",
+                "greatfootballwri0000unse"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL8941234W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL8807997M",
+            "lending_identifier_s": "sportsillustrate00edit_1",
+            "public_scan_b": false,
+            "title": "Sports Illustrated"
+        },
+        {
+            "author_key": [
+                "OL7579442A"
+            ],
+            "author_name": [
+                "Russell Hoye"
+            ],
+            "cover_edition_key": "OL27088828M",
+            "cover_i": 8722045,
+            "ebook_access": "printdisabled",
+            "edition_count": 23,
+            "first_publish_year": 2007,
+            "has_fulltext": true,
+            "ia": [
+                "sportmanagementp0000unse_l7t3"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL19903500W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport Management"
+        },
+        {
+            "author_key": [
+                "OL389032A"
+            ],
+            "author_name": [
+                "Jay J. Coakley"
+            ],
+            "cover_edition_key": "OL3683065M",
+            "cover_height": 500,
+            "cover_i": 1084565,
+            "cover_width": 384,
+            "ebook_access": "borrowable",
+            "edition_count": 15,
+            "first_publish_year": 1978,
+            "has_fulltext": true,
+            "ia": [
+                "sportinsocietyis0000coak_b4q0",
+                "sportinsocietyis0000coak",
+                "sportinsocietyis0000coak_g9h5",
+                "isbn_9780801603044",
+                "sportsinsocietyi0000coak_m8o7",
+                "sportinsocietyis00coak",
+                "sportinsocietyis00coak",
+                "sportinsocietyis07coak"
+            ],
+            "ia_collection": [
+                "americana",
+                "belmont-ol",
+                "binghamton-ol",
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled",
+                "riceuniversity-ol",
+                "rochester-ol",
+                "the-claremont-colleges-ol",
+                "unb-ol",
+                "universityofoklahoma-ol"
+            ],
+            "key": "/works/OL2667008W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL32143800M",
+            "lending_identifier_s": "sportinsocietyis0000coak_b4q0",
+            "public_scan_b": false,
+            "title": "Sport in society"
+        },
+        {
+            "author_key": [
+                "OL1194994A"
+            ],
+            "author_name": [
+                "Louise Fitzhugh"
+            ],
+            "cover_i": 244486,
+            "ebook_access": "printdisabled",
+            "edition_count": 15,
+            "first_publish_year": 1979,
+            "has_fulltext": true,
+            "ia": [
+                "sportfit00fitz",
+                "sport0000fitz",
+                "sport00loui",
+                "sport00fitz",
+                "sport0000fitz_q2c6",
+                "sportfitz00fitz"
+            ],
+            "ia_collection": [
+                "americana",
+                "delawarecountydistrictlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL5277986W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport"
+        },
+        {
+            "author_key": [
+                "OL389032A"
+            ],
+            "author_name": [
+                "Jay J. Coakley"
+            ],
+            "cover_edition_key": "OL7306756M",
+            "cover_i": 10202679,
+            "ebook_access": "borrowable",
+            "edition_count": 8,
+            "first_publish_year": 2003,
+            "has_fulltext": true,
+            "ia": [
+                "sportsinsocietyi0000coak_t0s0",
+                "sportsinsocietyi0000coak_09ed",
+                "sportsinsocietyi0000coak_g7c5",
+                "sportsinsocietyi00coak"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL2667007W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL22658729M",
+            "lending_identifier_s": "sportsinsocietyi0000coak_t0s0",
+            "public_scan_b": false,
+            "title": "Sports in Society"
+        },
+        {
+            "author_key": [
+                "OL1189896A",
+                "OL580566A"
+            ],
+            "author_name": [
+                "Richard M. Cohen",
+                "David S. Neft"
+            ],
+            "cover_edition_key": "OL10386474M",
+            "cover_i": 2368167,
+            "ebook_access": "borrowable",
+            "edition_count": 27,
+            "first_publish_year": 1987,
+            "has_fulltext": true,
+            "ia": [
+                "sportsencyclope000davi",
+                "sportsencycloped00davi",
+                "sportsencycloped0000neft_o0h9",
+                "sportsencycloped0000neft_z5o4",
+                "sportsencycloped0000neft_o9w3",
+                "sportsencycloped0000neft_o4w7",
+                "sportsencycloped2000neft",
+                "sportsencycloped0000neft_g0a6",
+                "sportsencycloped0021neft",
+                "sportsencycloped0000neft"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL14932338W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL9656685M",
+            "lending_identifier_s": "sportsencyclope000davi",
+            "public_scan_b": false,
+            "title": "The Sports Encyclopedia"
+        },
+        {
+            "author_key": [
+                "OL1120563A"
+            ],
+            "author_name": [
+                "Tim Hammond"
+            ],
+            "cover_edition_key": "OL3437289M",
+            "cover_i": 504567,
+            "ebook_access": "borrowable",
+            "edition_count": 10,
+            "first_publish_year": 1988,
+            "has_fulltext": true,
+            "ia": [
+                "sports00hamm_0",
+                "sports00hamm"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL5091584W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL3437289M",
+            "lending_identifier_s": "sports00hamm_0",
+            "public_scan_b": false,
+            "title": "Sports"
+        },
+        {
+            "author_key": [
+                "OL241533A"
+            ],
+            "author_name": [
+                "Robert S. Weinberg"
+            ],
+            "cover_edition_key": "OL3556484M",
+            "cover_i": 1364042,
+            "ebook_access": "borrowable",
+            "edition_count": 7,
+            "first_publish_year": 1995,
+            "has_fulltext": true,
+            "ia": [
+                "foundationsofspo0000wein_2ndEd.",
+                "foundationsofspo00wein",
+                "foundationsofspo0000wein",
+                "foundationsofspo0003wein"
+            ],
+            "ia_collection": [
+                "americana",
+                "inlibrary",
+                "internetarchivebooks",
+                "marygrovecollege",
+                "printdisabled"
+            ],
+            "key": "/works/OL2005230W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL388865M",
+            "lending_identifier_s": "foundationsofspo0000wein_2ndEd.",
+            "public_scan_b": false,
+            "title": "Foundations of sport and exercise psychology"
+        },
+        {
+            "author_key": [
+                "OL397043A"
+            ],
+            "author_name": [
+                "Cox, Richard H."
+            ],
+            "cover_edition_key": "OL3948260M",
+            "cover_i": 4342141,
+            "ebook_access": "borrowable",
+            "edition_count": 6,
+            "first_publish_year": 1985,
+            "has_fulltext": true,
+            "ia": [
+                "sportpsychologyc0000coxr_r6b6",
+                "sportpsychologyc0000coxr_b1l7",
+                "sportpsychologyc0000coxr",
+                "isbn_9780697013408",
+                "sportpsychologyc0000coxr_x4o8"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL2714124W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL2874908M",
+            "lending_identifier_s": "sportpsychologyc0000coxr_r6b6",
+            "public_scan_b": false,
+            "title": "Sport psychology"
+        },
+        {
+            "author_key": [
+                "OL453133A",
+                "OL2887411A",
+                "OL541507A",
+                "OL2887424A",
+                "OL2887425A"
+            ],
+            "author_name": [
+                "Arnold D. LeUnes",
+                "Arnold D. Le Unes",
+                "Jack R. Nation",
+                "Arnold Leunes",
+                "Jack Nation"
+            ],
+            "cover_edition_key": "OL3950707M",
+            "cover_i": 4343020,
+            "ebook_access": "printdisabled",
+            "edition_count": 10,
+            "first_publish_year": 1989,
+            "has_fulltext": true,
+            "ia": [
+                "sportpsychologyi0000leun_i1i3",
+                "sportpsychologyi0000leun_g4z7",
+                "sportpsychologyi0000leun"
+            ],
+            "ia_collection": [
+                "belmont-ol",
+                "binghamton-ol",
+                "cua-ol",
+                "internetarchivebooks",
+                "occidentalcollegelibrary-ol",
+                "openlibrary-d-ol",
+                "printdisabled",
+                "the-claremont-colleges-ol",
+                "uni-ol"
+            ],
+            "key": "/works/OL2965186W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "subtitle": "an introduction",
+            "title": "Sport psychology"
+        },
+        {
+            "author_key": [
+                "OL231069A",
+                "OL3251684A",
+                "OL3251685A"
+            ],
+            "author_name": [
+                "Jack H. Wilmore",
+                "David Costill",
+                "W. Larry Kenney"
+            ],
+            "cover_edition_key": "OL369637M",
+            "cover_i": 462110,
+            "ebook_access": "printdisabled",
+            "edition_count": 16,
+            "first_publish_year": 1994,
+            "has_fulltext": true,
+            "ia": [
+                "physiologyofspor00wilm",
+                "physiologyofspor0000kenn",
+                "physiologyofspor0000cost",
+                "physiologyofspor0000wilm_s2v5"
+            ],
+            "ia_collection": [
+                "americana",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL1927247W",
+            "language": [
+                "eng",
+                "fre"
+            ],
+            "public_scan_b": false,
+            "title": "Physiology of sport and exercise"
+        },
+        {
+            "author_key": [
+                "OL21218A"
+            ],
+            "author_name": [
+                "Leslie McFarlane"
+            ],
+            "cover_edition_key": "OL24229251M",
+            "cover_height": 3321,
+            "cover_i": 6477252,
+            "cover_width": 2013,
+            "ebook_access": "borrowable",
+            "edition_count": 4,
+            "first_publish_year": 1996,
+            "has_fulltext": true,
+            "ia": [
+                "bloodsport00dixo"
+            ],
+            "ia_collection": [
+                "americana",
+                "bpljordan-ol",
+                "cnusd-ol",
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL16480105W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL24229251M",
+            "lending_identifier_s": "bloodsport00dixo",
+            "public_scan_b": false,
+            "title": "Blood Sport"
+        },
+        {
+            "author_key": [
+                "OL9264337A"
+            ],
+            "author_name": [
+                "Nancy Streza"
+            ],
+            "cover_edition_key": "OL46102380M",
+            "cover_i": 13196305,
+            "ebook_access": "no_ebook",
+            "edition_count": 36,
+            "first_publish_year": 2018,
+            "has_fulltext": false,
+            "key": "/works/OL34046403W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "My Favorite Sport"
+        },
+        {
+            "author_key": [
+                "OL7513446A"
+            ],
+            "author_name": [
+                "David J. Epstein"
+            ],
+            "cover_edition_key": "OL26889279M",
+            "cover_i": 9644054,
+            "ebook_access": "unclassified",
+            "edition_count": 1,
+            "first_publish_year": 2013,
+            "has_fulltext": false,
+            "ia": [
+                "sportsgeneinside0000epst"
+            ],
+            "ia_collection": [
+                "litigationworks"
+            ],
+            "key": "/works/OL19671172W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "The sports gene"
+        },
+        {
+            "author_key": [
+                "OL1517502A"
+            ],
+            "author_name": [
+                "Mike Weed"
+            ],
+            "cover_edition_key": "OL3688869M",
+            "cover_i": 1400856,
+            "ebook_access": "printdisabled",
+            "edition_count": 17,
+            "first_publish_year": 2003,
+            "has_fulltext": true,
+            "ia": [
+                "sportstourismpar0000weed_2edi",
+                "sportstourismpar0000weed"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL6035509W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports tourism"
+        },
+        {
+            "author_key": [
+                "OL6920678A"
+            ],
+            "author_name": [
+                "Lee Bennett Hopkins"
+            ],
+            "cover_edition_key": "OL349270M",
+            "cover_i": 1065443,
+            "ebook_access": "borrowable",
+            "edition_count": 6,
+            "first_publish_year": 1999,
+            "has_fulltext": true,
+            "ia": [
+                "sportssportsspor00bria",
+                "sportssportsspor0000unse"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "openlibrary-d-ol",
+                "printdisabled",
+                "stmaryscountylibrary"
+            ],
+            "key": "/works/OL16786132W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL9525553M",
+            "lending_identifier_s": "sportssportsspor00bria",
+            "public_scan_b": false,
+            "title": "Sports! sports! sports!"
+        },
+        {
+            "author_key": [
+                "OL3074788A"
+            ],
+            "author_name": [
+                "Pat Brown"
+            ],
+            "cover_edition_key": "OL9809067M",
+            "cover_height": 475,
+            "cover_i": 1968387,
+            "cover_width": 299,
+            "ebook_access": "borrowable",
+            "edition_count": 7,
+            "first_publish_year": 2003,
+            "has_fulltext": true,
+            "ia": [
+                "killingforsporti0000brow",
+                "killingforsporti0000brow_k2q2"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "miltonpubliclibrary-ol",
+                "printdisabled"
+            ],
+            "key": "/works/OL8912354W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL8721086M",
+            "lending_identifier_s": "killingforsporti0000brow",
+            "public_scan_b": false,
+            "title": "Killing for Sport"
+        },
+        {
+            "author_key": [
+                "OL19822A"
+            ],
+            "author_name": [
+                "Don Nardo"
+            ],
+            "cover_edition_key": "OL377616M",
+            "cover_i": 3737729,
+            "ebook_access": "borrowable",
+            "edition_count": 2,
+            "first_publish_year": 1999,
+            "has_fulltext": true,
+            "ia": [
+                "greekromansport00nard",
+                "greekromansport00nard"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL15072222W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL377616M",
+            "lending_identifier_s": "greekromansport00nard",
+            "public_scan_b": false,
+            "title": "Greek and Roman sport"
+        },
+        {
+            "author_key": [
+                "OL2909843A",
+                "OL2909842A"
+            ],
+            "author_name": [
+                "Judy A. Driskell",
+                "Constance Kies"
+            ],
+            "cover_edition_key": "OL1094012M",
+            "cover_i": 1598453,
+            "ebook_access": "printdisabled",
+            "edition_count": 8,
+            "first_publish_year": 1995,
+            "has_fulltext": true,
+            "ia": [
+                "sportsnutritionm0000unse"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL18359430W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports nutrition"
+        },
+        {
+            "author_key": [
+                "OL3470601A",
+                "OL8012597A"
+            ],
+            "author_name": [
+                "Paul M. Pedersen",
+                "Lucie Thibault"
+            ],
+            "cover_edition_key": "OL29352148M",
+            "cover_i": 10386383,
+            "ebook_access": "no_ebook",
+            "edition_count": 12,
+            "first_publish_year": 2010,
+            "has_fulltext": false,
+            "key": "/works/OL21191011W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Contemporary Sport Management"
+        },
+        {
+            "author_key": [
+                "OL904351A",
+                "OL2643613A"
+            ],
+            "author_name": [
+                "Jari Ylinen",
+                "Mel Cash"
+            ],
+            "cover_edition_key": "OL1915153M",
+            "cover_i": 67218,
+            "ebook_access": "borrowable",
+            "edition_count": 4,
+            "first_publish_year": 1988,
+            "has_fulltext": true,
+            "ia": [
+                "sportsmassage0000ylin"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL4511224W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL1915153M",
+            "lending_identifier_s": "sportsmassage0000ylin",
+            "public_scan_b": false,
+            "title": "Sports massage"
+        },
+        {
+            "author_key": [
+                "OL68744A"
+            ],
+            "author_name": [
+                "Francie Alexander"
+            ],
+            "cover_edition_key": "OL7512703M",
+            "cover_i": 277661,
+            "ebook_access": "borrowable",
+            "edition_count": 48,
+            "first_publish_year": 2003,
+            "has_fulltext": true,
+            "ia": [
+                "phonicsfun00fran",
+                "isbn_9780439409346",
+                "phonicsfun00fran_1",
+                "isbn_9780439406789",
+                "phonicsfun00fran_0",
+                "phonicsfun00fran_n9x"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL816016W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL10251179M",
+            "lending_identifier_s": "phonicsfun00fran",
+            "public_scan_b": false,
+            "title": "Good Sports (Clifford the Big Red Dog Phonics Fun Reading Program, Book 2)"
+        },
+        {
+            "author_key": [
+                "OL7802678A",
+                "OL4357603A"
+            ],
+            "author_name": [
+                "Asker Jeukendrup",
+                "Michael Gleeson"
+            ],
+            "cover_edition_key": "OL27832895M",
+            "cover_i": 9226392,
+            "ebook_access": "no_ebook",
+            "edition_count": 6,
+            "first_publish_year": 2018,
+            "has_fulltext": false,
+            "key": "/works/OL20584966W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport Nutrition"
+        },
+        {
+            "author_key": [
+                "OL86259A"
+            ],
+            "author_name": [
+                "Stefano Benni"
+            ],
+            "cover_edition_key": "OL20161566M",
+            "cover_height": 207,
+            "cover_i": 5519536,
+            "cover_width": 128,
+            "ebook_access": "no_ebook",
+            "edition_count": 2,
+            "first_publish_year": 1976,
+            "has_fulltext": false,
+            "key": "/works/OL959596W",
+            "language": [
+                "ita"
+            ],
+            "public_scan_b": false,
+            "title": "Bar sport"
+        },
+        {
+            "author_key": [
+                "OL215841A"
+            ],
+            "author_name": [
+                "Paul Laurence Dunbar"
+            ],
+            "cover_edition_key": "OL9547315M",
+            "cover_i": 1861787,
+            "ebook_access": "public",
+            "edition_count": 65,
+            "first_publish_year": 1902,
+            "has_fulltext": true,
+            "ia": [
+                "sportofgods00dunb_0",
+                "sportofgods0000dunb_m7l8",
+                "sportofgods0000dunb_i5s9",
+                "sportofgods0000dunb",
+                "sportofgods00dunb",
+                "sportofgods0000paul",
+                "sportofgods0000dunb_v0l4",
+                "sportofgodsother0000dunb"
+            ],
+            "ia_collection": [
+                "Wellesley_College_Library",
+                "americana",
+                "blc",
+                "dartmouthlibrary-ol",
+                "inlibrary",
+                "internetarchivebooks",
+                "johnshopkins-ol",
+                "marygrovecollege",
+                "openlibrary-d-ol",
+                "printdisabled",
+                "rochester-ol",
+                "udc-ol",
+                "universityofarizona-ol",
+                "universityofcoloradoboulder-ol",
+                "universityofoklahoma-ol"
+            ],
+            "key": "/works/OL1797341W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL13555529M",
+            "lending_identifier_s": "sportofgods00dunb_0",
+            "public_scan_b": true,
+            "title": "The Sport of the Gods",
+            "id_standard_ebooks": [
+                "paul-laurence-dunbar/the-sport-of-the-gods"
+            ]
+        },
+        {
+            "author_key": [
+                "OL535857A"
+            ],
+            "author_name": [
+                "Trevor Slack"
+            ],
+            "cover_edition_key": "OL987960M",
+            "cover_i": 1620886,
+            "ebook_access": "borrowable",
+            "edition_count": 3,
+            "first_publish_year": 1997,
+            "has_fulltext": true,
+            "ia": [
+                "understandingspo0000slac_h1p3",
+                "understandingspo0000slac"
+            ],
+            "ia_collection": [
+                "gwulibraries-ol",
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled",
+                "trent_university",
+                "unb-ol",
+                "uni-ol"
+            ],
+            "key": "/works/OL3280707W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL3403945M",
+            "lending_identifier_s": "understandingspo0000slac_h1p3",
+            "public_scan_b": false,
+            "subtitle": "the application of organization theory",
+            "title": "Understanding sport organizations"
+        },
+        {
+            "author_key": [
+                "OL1392755A"
+            ],
+            "author_name": [
+                "Elizabeth Hewitt"
+            ],
+            "cover_edition_key": "OL7572749M",
+            "cover_i": 13297166,
+            "ebook_access": "borrowable",
+            "edition_count": 3,
+            "first_publish_year": 1983,
+            "has_fulltext": true,
+            "ia": [
+                "sportingproposit0000hewi"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL5727997W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL7571318M",
+            "lending_identifier_s": "sportingproposit0000hewi",
+            "public_scan_b": false,
+            "title": "A Sporting Proposition"
+        },
+        {
+            "author_key": [
+                "OL322919A"
+            ],
+            "author_name": [
+                "Robert Smith Surtees"
+            ],
+            "cover_edition_key": "OL23320810M",
+            "cover_height": 1601,
+            "cover_i": 8245431,
+            "cover_width": 1037,
+            "ebook_access": "public",
+            "edition_count": 35,
+            "first_publish_year": 1852,
+            "has_fulltext": true,
+            "ia": [
+                "mrspongessportin00surt_1",
+                "mrspongessportin00surtuoft",
+                "mrspongessportin52surt",
+                "mrspongessportin00surtrich",
+                "mrspongessportin1852surt",
+                "mrspongessportin00surt",
+                "mrspongessporti00surtgoog",
+                "mrspongessporti000surt"
+            ],
+            "ia_collection": [
+                "americana",
+                "blc",
+                "bostonpubliclibrary",
+                "bplfrc",
+                "cdl",
+                "cua-ol",
+                "inlibrary",
+                "internetarchivebooks",
+                "kellylibrary",
+                "printdisabled",
+                "toronto",
+                "university_of_toronto",
+                "websterfamilyvetmed"
+            ],
+            "key": "/works/OL2371996W",
+            "language": [
+                "und",
+                "eng"
+            ],
+            "lending_edition_s": "OL6700143M",
+            "lending_identifier_s": "mrspongessportin00surt_1",
+            "public_scan_b": true,
+            "title": "Mr. Sponge's sporting tour"
+        },
+        {
+            "author_key": [
+                "OL5409029A",
+                "OL3051334A",
+                "OL3051335A",
+                "OL1435234A"
+            ],
+            "author_name": [
+                "David Shilbury",
+                "David Shilbury",
+                "Shayne Quick",
+                "Hans Westerbeek"
+            ],
+            "cover_edition_key": "OL8647467M",
+            "cover_i": 919904,
+            "ebook_access": "printdisabled",
+            "edition_count": 21,
+            "first_publish_year": 1998,
+            "has_fulltext": true,
+            "ia": [
+                "strategicsportma0000shil_v6q9",
+                "strategicsportma0000shil"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL12331755W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Strategic sport marketing"
+        },
+        {
+            "author_key": [
+                "OL549995A"
+            ],
+            "author_name": [
+                "Claudine Sherrill"
+            ],
+            "cover_edition_key": "OL3683903M",
+            "cover_i": 1342713,
+            "ebook_access": "borrowable",
+            "edition_count": 5,
+            "first_publish_year": 1993,
+            "has_fulltext": true,
+            "ia": [
+                "adaptedphysicala0000sher",
+                "adaptedphysicala00sher"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "openlibrary-d-ol",
+                "printdisabled",
+                "unb-ol",
+                "uni-ol"
+            ],
+            "key": "/works/OL3375144W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL1022692M",
+            "lending_identifier_s": "adaptedphysicala0000sher",
+            "public_scan_b": false,
+            "title": "Adapted physical activity, recreation, and sport"
+        },
+        {
+            "author_key": [
+                "OL239003A"
+            ],
+            "author_name": [
+                "Matthew D. Shank"
+            ],
+            "cover_edition_key": "OL3946010M",
+            "cover_height": 475,
+            "cover_i": 82914,
+            "cover_width": 341,
+            "ebook_access": "printdisabled",
+            "edition_count": 10,
+            "first_publish_year": 1998,
+            "has_fulltext": true,
+            "ia": [
+                "sportsmarketings0000shan",
+                "sportsmarketings0000shan_r7z5",
+                "sportsmarketings0000shan_q8a1",
+                "sportsmarketings0000shan_j6o3"
+            ],
+            "ia_collection": [
+                "barryuniversity-ol",
+                "binghamton-ol",
+                "gwulibraries-ol",
+                "internetarchivebooks",
+                "marymount-ol",
+                "printdisabled",
+                "riceuniversity-ol",
+                "unb-ol",
+                "uni-ol",
+                "universityofcoloradoboulder-ol",
+                "universityofthewest-ol"
+            ],
+            "key": "/works/OL1986454W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports Marketing"
+        },
+        {
+            "author_key": [
+                "OL8063680A",
+                "OL6841855A",
+                "OL2515617A"
+            ],
+            "author_name": [
+                "Bernard J. Mullin",
+                "Stephen Hardy",
+                "Sutton, William A."
+            ],
+            "cover_edition_key": "OL28531277M",
+            "cover_i": 13437892,
+            "ebook_access": "borrowable",
+            "edition_count": 8,
+            "first_publish_year": 2007,
+            "has_fulltext": true,
+            "ia": [
+                "sportmarketing0000mull_r6w8"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL21075443W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL28531277M",
+            "lending_identifier_s": "sportmarketing0000mull_r6w8",
+            "public_scan_b": false,
+            "title": "Sport Marketing"
+        },
+        {
+            "author_key": [
+                "OL835211A"
+            ],
+            "author_name": [
+                "James G. Hay"
+            ],
+            "cover_edition_key": "OL1723898M",
+            "cover_i": 84545,
+            "ebook_access": "borrowable",
+            "edition_count": 5,
+            "first_publish_year": 1973,
+            "has_fulltext": true,
+            "ia": [
+                "biomechanicsofsp0000hayj_h6o3",
+                "isbn_9780130771155",
+                "biomechanicsofsp0000hayj",
+                "biomechanicsofsp0000hayj_c9i6"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL4299652W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL4547484M",
+            "lending_identifier_s": "biomechanicsofsp0000hayj_h6o3",
+            "public_scan_b": false,
+            "title": "The biomechanics of sports techniques"
+        },
+        {
+            "author_key": [
+                "OL239003A"
+            ],
+            "author_name": [
+                "Matthew D. Shank"
+            ],
+            "cover_edition_key": "OL26870436M",
+            "cover_i": 8566378,
+            "ebook_access": "no_ebook",
+            "edition_count": 14,
+            "first_publish_year": 2014,
+            "has_fulltext": false,
+            "key": "/works/OL19650669W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports Marketing"
+        },
+        {
+            "author_key": [
+                "OL8222957A"
+            ],
+            "author_name": [
+                "Robert Smith Surtees"
+            ],
+            "cover_edition_key": "OL33279842M",
+            "cover_height": 500,
+            "cover_i": 11946684,
+            "cover_width": 315,
+            "ebook_access": "no_ebook",
+            "edition_count": 57,
+            "first_publish_year": 1984,
+            "has_fulltext": false,
+            "key": "/works/OL25030921W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Mr. Sponge's Sporting Tour"
+        },
+        {
+            "author_key": [
+                "OL2719873A",
+                "OL9263892A"
+            ],
+            "author_name": [
+                "Ed Miller",
+                "Matthew Davidow"
+            ],
+            "cover_edition_key": "OL32600393M",
+            "cover_i": 11238188,
+            "ebook_access": "no_ebook",
+            "edition_count": 1,
+            "first_publish_year": 2019,
+            "has_fulltext": false,
+            "key": "/works/OL24581969W",
+            "public_scan_b": false,
+            "title": "The Logic Of Sports Betting"
+        },
+        {
+            "author_key": [
+                "OL5358901A"
+            ],
+            "author_name": [
+                "James Salter"
+            ],
+            "cover_edition_key": "OL12743844M",
+            "cover_height": 475,
+            "cover_i": 3216808,
+            "cover_width": 305,
+            "ebook_access": "borrowable",
+            "edition_count": 31,
+            "first_publish_year": 1967,
+            "has_fulltext": true,
+            "ia": [
+                "unsportetunpasse0000jame",
+                "sportandpastime00salt",
+                "sportandpastime0000salt_j0p3",
+                "sportandpastime0000salt"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "occidentalcollegelibrary-ol",
+                "openlibrary-d-ol",
+                "printdisabled",
+                "rochester-ol",
+                "wrlc-ol"
+            ],
+            "key": "/works/OL2009183W",
+            "language": [
+                "ger",
+                "fre",
+                "spa",
+                "eng"
+            ],
+            "lending_edition_s": "OL12642840M",
+            "lending_identifier_s": "unsportetunpasse0000jame",
+            "public_scan_b": false,
+            "title": "A sport and a pastime"
+        },
+        {
+            "author_key": [
+                "OL3470601A",
+                "OL3470602A",
+                "OL3470603A"
+            ],
+            "author_name": [
+                "Paul M. Pedersen",
+                "Kimberly S. Miloch",
+                "Pamela C. Laucella"
+            ],
+            "cover_edition_key": "OL10600253M",
+            "cover_i": 2560094,
+            "ebook_access": "printdisabled",
+            "edition_count": 8,
+            "first_publish_year": 2007,
+            "has_fulltext": true,
+            "ia": [
+                "strategicsportco0000pede_x0k4",
+                "strategicsportco0000pede"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL18703601W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Strategic sport communication"
+        },
+        {
+            "author_key": [
+                "OL1393347A"
+            ],
+            "author_name": [
+                "Guy Masterman"
+            ],
+            "cover_edition_key": "OL27089586M",
+            "cover_i": 8723510,
+            "ebook_access": "printdisabled",
+            "edition_count": 25,
+            "first_publish_year": 2004,
+            "has_fulltext": true,
+            "ia": [
+                "strategicsportse0000mast_e1v5"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL19904340W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Strategic Sports Event Management"
+        },
+        {
+            "author_key": [
+                "OL527374A"
+            ],
+            "author_name": [
+                "Eden Robinson"
+            ],
+            "cover_edition_key": "OL8076408M",
+            "cover_i": 530773,
+            "ebook_access": "borrowable",
+            "edition_count": 6,
+            "first_publish_year": 2006,
+            "has_fulltext": true,
+            "ia": [
+                "bloodsports0000robi"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL3236108W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL17234678M",
+            "lending_identifier_s": "bloodsports0000robi",
+            "public_scan_b": false,
+            "title": "Blood sports"
+        },
+        {
+            "author_key": [
+                "OL7132682A"
+            ],
+            "author_name": [
+                "Michael J. Fetchko"
+            ],
+            "cover_edition_key": "OL51309537M",
+            "cover_i": 14597842,
+            "ebook_access": "printdisabled",
+            "edition_count": 8,
+            "first_publish_year": 2013,
+            "has_fulltext": true,
+            "ia": [
+                "isbn_2900132135466"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL16654420W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports marketing"
+        },
+        {
+            "author_key": [
+                "OL216812A"
+            ],
+            "author_name": [
+                "Benjamin G. Rader"
+            ],
+            "cover_edition_key": "OL3687006M",
+            "cover_i": 85624,
+            "ebook_access": "printdisabled",
+            "edition_count": 15,
+            "first_publish_year": 1983,
+            "has_fulltext": true,
+            "ia": [
+                "americansportsfr0000rade",
+                "americansportsfr0000rade_v2e3",
+                "americansportsfr0000rade_q9v6",
+                "americansportsfr00rade",
+                "americansportsfr0000rade_e5c0",
+                "americansportsfr0000rade_t9l5"
+            ],
+            "ia_collection": [
+                "americanuniversity-ol",
+                "barryuniversity-ol",
+                "binghamton-ol",
+                "dartmouthlibrary-ol",
+                "drakeuniversity-ol",
+                "gwulibraries-ol",
+                "internetarchivebooks",
+                "ithacacollege-ol",
+                "johnshopkins-ol",
+                "kalamazoocollege-ol",
+                "occidentalcollegelibrary-ol",
+                "printdisabled",
+                "rochester-ol",
+                "the-claremont-colleges-ol",
+                "udc-ol",
+                "unb-ol",
+                "uni-ol",
+                "universityofarizona-ol",
+                "universityofoklahoma-ol",
+                "wilsoncollege-ol"
+            ],
+            "key": "/works/OL1807633W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "American sports"
+        },
+        {
+            "author_key": [
+                "OL5436551A",
+                "OL2641081A",
+                "OL2641082A"
+            ],
+            "author_name": [
+                "Brukner, Peter D.R.C.O.G.",
+                "Peter Brukner",
+                "Karim Khan"
+            ],
+            "cover_edition_key": "OL7308345M",
+            "cover_i": 66314,
+            "ebook_access": "borrowable",
+            "edition_count": 5,
+            "first_publish_year": 2006,
+            "has_fulltext": true,
+            "ia": [
+                "clinicalsportsme0000pete",
+                "clinicalsportsme0000bruk"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled",
+                "unb-ol",
+                "uni-ol"
+            ],
+            "key": "/works/OL12368853W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL30725246M",
+            "lending_identifier_s": "clinicalsportsme0000pete",
+            "public_scan_b": false,
+            "title": "Clinical sports medicine"
+        },
+        {
+            "author_key": [
+                "OL447957A"
+            ],
+            "author_name": [
+                "David Marshall"
+            ],
+            "cover_edition_key": "OL10218517M",
+            "cover_i": 11573863,
+            "ebook_access": "borrowable",
+            "edition_count": 9,
+            "first_publish_year": 1994,
+            "has_fulltext": true,
+            "ia": [
+                "successfulsports0000davi",
+                "hockey0000mars",
+                "rugby0000mars",
+                "basketball0000mars"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL1990856W",
+            "lending_edition_s": "OL10218532M",
+            "lending_identifier_s": "successfulsports0000davi",
+            "public_scan_b": false,
+            "title": "Successful Sports"
+        },
+        {
+            "author_key": [
+                "OL1436443A"
+            ],
+            "author_name": [
+                "Rodney D. Fort"
+            ],
+            "cover_edition_key": "OL7333463M",
+            "cover_i": 1104844,
+            "ebook_access": "borrowable",
+            "edition_count": 7,
+            "first_publish_year": 2002,
+            "has_fulltext": true,
+            "ia": [
+                "sportseconomics0000fort",
+                "sportseconomics0002fort"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL5852234W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL15527833M",
+            "lending_identifier_s": "sportseconomics0000fort",
+            "public_scan_b": false,
+            "title": "Sports economics"
+        },
+        {
+            "author_key": [
+                "OL1429155A",
+                "OL2670866A",
+                "OL2670867A"
+            ],
+            "author_name": [
+                "Michael Leeds",
+                "Michael A. Leeds",
+                "Peter von Allmen"
+            ],
+            "cover_edition_key": "OL9816084M",
+            "cover_i": 193191,
+            "ebook_access": "printdisabled",
+            "edition_count": 18,
+            "first_publish_year": 2004,
+            "has_fulltext": true,
+            "ia": [
+                "economicsofsport0000leed_05ed",
+                "economicsofsport0005edleed",
+                "economicsofsport0000leed_z9s8"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled",
+                "the-claremont-colleges-ol",
+                "universityofoklahoma-ol"
+            ],
+            "key": "/works/OL5830363W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "The economics of sports"
+        },
+        {
+            "author_key": [
+                "OL2701136A"
+            ],
+            "author_name": [
+                "Rod Sheard"
+            ],
+            "cover_edition_key": "OL7499600M",
+            "cover_i": 1224556,
+            "ebook_access": "printdisabled",
+            "edition_count": 7,
+            "first_publish_year": 2000,
+            "has_fulltext": true,
+            "ia": [
+                "sportsarchitectu0000shea"
+            ],
+            "ia_collection": [
+                "binghamton-ol",
+                "cua-ol",
+                "dartmouthlibrary-ol",
+                "internetarchivebooks",
+                "printdisabled",
+                "riceuniversity-ol",
+                "universityofcoloradoboulder-ol",
+                "universityofoklahoma-ol"
+            ],
+            "key": "/works/OL8106777W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports Architecture"
+        },
+        {
+            "author_key": [
+                "OL920043A",
+                "OL382771A",
+                "OL738534A",
+                "OL3333963A",
+                "OL1279157A"
+            ],
+            "author_name": [
+                "Nils Asle Bergsgard",
+                "Barrie Houlihan",
+                "Per Mangset",
+                "Svein Ingve Nodland",
+                "Hilmar Rommetvedt"
+            ],
+            "cover_edition_key": "OL9832145M",
+            "cover_i": 1402330,
+            "ebook_access": "no_ebook",
+            "edition_count": 16,
+            "first_publish_year": 2007,
+            "has_fulltext": false,
+            "key": "/works/OL19574622W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport policy"
+        },
+        {
+            "author_key": [
+                "OL6364554A"
+            ],
+            "author_name": [
+                "Bill Phillips"
+            ],
+            "cover_edition_key": "OL24220386M",
+            "cover_i": 6564958,
+            "ebook_access": "borrowable",
+            "edition_count": 1,
+            "first_publish_year": 1999,
+            "has_fulltext": true,
+            "ia": [
+                "sportssupplement00phil"
+            ],
+            "ia_collection": [
+                "americana",
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL15152778W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL24220386M",
+            "lending_identifier_s": "sportssupplement00phil",
+            "public_scan_b": false,
+            "subtitle": "3rd issue",
+            "title": "Sports supplement review"
+        },
+        {
+            "author_key": [
+                "OL2639921A"
+            ],
+            "author_name": [
+                "Jean M. Williams"
+            ],
+            "cover_edition_key": "OL3426628M",
+            "cover_i": 1085104,
+            "ebook_access": "printdisabled",
+            "edition_count": 4,
+            "first_publish_year": 2006,
+            "has_fulltext": true,
+            "ia": [
+                "appliedsportpsyc0000unse_z4z5",
+                "appliedsportpsyc0000unse"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL19167380W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Applied sport psychology"
+        },
+        {
+            "author_key": [
+                "OL3305259A"
+            ],
+            "author_name": [
+                "L. Matveyev"
+            ],
+            "cover_edition_key": "OL13817722M",
+            "cover_i": 6751415,
+            "ebook_access": "no_ebook",
+            "edition_count": 4,
+            "first_publish_year": 1981,
+            "has_fulltext": false,
+            "key": "/works/OL9248555W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Fundamentals of sports training"
+        },
+        {
+            "author_key": [
+                "OL3137755A",
+                "OL8148052A"
+            ],
+            "author_name": [
+                "Rob Wilson - undifferentiated",
+                "Mark Piekarz"
+            ],
+            "cover_edition_key": "OL28802636M",
+            "cover_i": 13933904,
+            "ebook_access": "no_ebook",
+            "edition_count": 6,
+            "first_publish_year": 2015,
+            "has_fulltext": false,
+            "key": "/works/OL21273824W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport Management"
+        },
+        {
+            "author_key": [
+                "OL226618A"
+            ],
+            "author_name": [
+                "Roger Bartlett"
+            ],
+            "cover_edition_key": "OL1015181M",
+            "cover_i": 1224528,
+            "ebook_access": "printdisabled",
+            "edition_count": 20,
+            "first_publish_year": 1996,
+            "has_fulltext": true,
+            "ia": [
+                "introductiontosp0000bart_e0v5"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "johnshopkins-ol",
+                "printdisabled"
+            ],
+            "key": "/works/OL1893007W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Introduction to sports biomechanics"
+        },
+        {
+            "author_key": [
+                "OL2667464A"
+            ],
+            "author_name": [
+                "Thomas A. Severini"
+            ],
+            "cover_edition_key": "OL29209727M",
+            "cover_i": 12744398,
+            "ebook_access": "printdisabled",
+            "edition_count": 10,
+            "first_publish_year": 2014,
+            "has_fulltext": true,
+            "ia": [
+                "analyticmethodsi0000seve"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "johnshopkins-ol",
+                "printdisabled"
+            ],
+            "key": "/works/OL20751093W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Analytic Methods in Sports"
+        },
+        {
+            "author_key": [
+                "OL329907A"
+            ],
+            "author_name": [
+                "Joy Berry"
+            ],
+            "cover_edition_key": "OL24934455M",
+            "cover_i": 6905390,
+            "ebook_access": "borrowable",
+            "edition_count": 14,
+            "first_publish_year": 1984,
+            "has_fulltext": true,
+            "ia": [
+                "bwb_O7-CAX-732",
+                "letstalkabout00berr",
+                "bookaboutbeingba00_0",
+                "bwb_S0-AUP-413",
+                "parlonsdumauvais0000berr",
+                "beingbadsport0000berr",
+                "helpmebegoodbein0000joyb",
+                "helpmebegoodabou0000joyb"
+            ],
+            "ia_collection": [
+                "cnusd-ol",
+                "delawarecountydistrictlibrary-ol",
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL2403657W",
+            "language": [
+                "fre",
+                "eng"
+            ],
+            "lending_edition_s": "OL47054851M",
+            "lending_identifier_s": "bwb_O7-CAX-732",
+            "public_scan_b": false,
+            "title": "Being a Bad Sport"
+        },
+        {
+            "author_key": [
+                "OL2705502A"
+            ],
+            "author_name": [
+                "Steve Ward"
+            ],
+            "cover_edition_key": "OL37119674M",
+            "cover_height": 3185,
+            "cover_i": 12903794,
+            "cover_width": 1899,
+            "ebook_access": "printdisabled",
+            "edition_count": 2,
+            "first_publish_year": 2011,
+            "has_fulltext": true,
+            "ia": [
+                "sportsbettingtow0000ward"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL27334068W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports Betting to Win"
+        },
+        {
+            "author_key": [
+                "OL1685354A"
+            ],
+            "author_name": [
+                "Dick, Frank W."
+            ],
+            "cover_edition_key": "OL11250634M",
+            "cover_i": 2553764,
+            "ebook_access": "printdisabled",
+            "edition_count": 3,
+            "first_publish_year": 1980,
+            "has_fulltext": true,
+            "ia": [
+                "sportstrainingpr0000dick_v2u1",
+                "sportstrainingpr0000dick_t3v9"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled",
+                "uni-ol"
+            ],
+            "key": "/works/OL6397077W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports Training Principles"
+        },
+        {
+            "author_key": [
+                "OL4940304A"
+            ],
+            "author_name": [
+                "Russell Hoye"
+            ],
+            "cover_edition_key": "OL25054310M",
+            "cover_i": 10561648,
+            "ebook_access": "printdisabled",
+            "edition_count": 1,
+            "first_publish_year": 2012,
+            "has_fulltext": true,
+            "ia": [
+                "sportmanagementp0000unse"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL16176319W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport management"
+        },
+        {
+            "author_key": [
+                "OL716347A"
+            ],
+            "author_name": [
+                "Jennifer Hargreaves"
+            ],
+            "cover_edition_key": "OL1415134M",
+            "cover_i": 1203506,
+            "ebook_access": "unclassified",
+            "edition_count": 1,
+            "first_publish_year": 1994,
+            "has_fulltext": false,
+            "ia": [
+                "sportingfemalesc00harg"
+            ],
+            "key": "/works/OL3931241W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sporting females"
+        },
+        {
+            "author_key": [
+                "OL389032A"
+            ],
+            "author_name": [
+                "Jay J. Coakley"
+            ],
+            "cover_edition_key": "OL9260462M",
+            "cover_i": 1085811,
+            "ebook_access": "borrowable",
+            "edition_count": 10,
+            "first_publish_year": 2003,
+            "has_fulltext": true,
+            "ia": [
+                "sportsinsocietyi0000coak"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL283372W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL9458707M",
+            "lending_identifier_s": "sportsinsocietyi0000coak",
+            "public_scan_b": false,
+            "title": "Sports in Society"
+        },
+        {
+            "author_key": [
+                "OL27064A"
+            ],
+            "author_name": [
+                "Dick Francis"
+            ],
+            "cover_edition_key": "OL9769352M",
+            "cover_i": 196243,
+            "ebook_access": "borrowable",
+            "edition_count": 24,
+            "first_publish_year": 1957,
+            "has_fulltext": true,
+            "ia": [
+                "sportofqueens0000dick",
+                "sportofqueensana0000fran",
+                "sportofqueensaut0000fran",
+                "sportofqueensaut0000fran_e1a6",
+                "sportofqueensaut0000dick"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL463353W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL49942433M",
+            "lending_identifier_s": "sportofqueens0000dick",
+            "public_scan_b": false,
+            "subtitle": "the autobiography of Dick Francis.",
+            "title": "The sport of Queens"
+        },
+        {
+            "author_key": [
+                "OL234518A"
+            ],
+            "author_name": [
+                "Deborah A. Wuest"
+            ],
+            "cover_edition_key": "OL375770M",
+            "cover_i": 1075602,
+            "ebook_access": "borrowable",
+            "edition_count": 3,
+            "first_publish_year": 1991,
+            "has_fulltext": true,
+            "ia": [
+                "foundationsofphy0011edwues_d0t5",
+                "foundationsofphy0000wues",
+                "foundationsofphy0000wues_a8e4"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled",
+                "universityofcoloradoboulder-ol"
+            ],
+            "key": "/works/OL1954874W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL1862277M",
+            "lending_identifier_s": "foundationsofphy0011edwues_d0t5",
+            "public_scan_b": false,
+            "title": "Foundations of physical education and sport"
+        },
+        {
+            "author_key": [
+                "OL7352613A"
+            ],
+            "author_name": [
+                "Kathleen Armour"
+            ],
+            "ebook_access": "no_ebook",
+            "edition_count": 7,
+            "first_publish_year": 2011,
+            "has_fulltext": false,
+            "key": "/works/OL25157885W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport Pedagogy"
+        },
+        {
+            "author_key": [
+                "OL534355A"
+            ],
+            "author_name": [
+                "Michael Mandelbaum"
+            ],
+            "cover_edition_key": "OL8820621M",
+            "cover_i": 852884,
+            "ebook_access": "printdisabled",
+            "edition_count": 2,
+            "first_publish_year": 2004,
+            "has_fulltext": true,
+            "ia": [
+                "meaningofsportsw0000mand"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL3274234W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "The Meaning of Sports"
+        },
+        {
+            "author_key": [
+                "OL220369A"
+            ],
+            "author_name": [
+                "Christopher M. Norris"
+            ],
+            "cover_edition_key": "OL350826M",
+            "cover_i": 493357,
+            "ebook_access": "borrowable",
+            "edition_count": 3,
+            "first_publish_year": 1992,
+            "has_fulltext": true,
+            "ia": [
+                "sportsinjuriesdi0000norr"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL1840065W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL350826M",
+            "lending_identifier_s": "sportsinjuriesdi0000norr",
+            "public_scan_b": false,
+            "title": "Sports injuries"
+        },
+        {
+            "author_key": [
+                "OL7488148A"
+            ],
+            "author_name": [
+                "Matt Jarvis"
+            ],
+            "ebook_access": "no_ebook",
+            "edition_count": 12,
+            "first_publish_year": 2005,
+            "has_fulltext": false,
+            "key": "/works/OL25155859W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport Psychology"
+        },
+        {
+            "author_key": [
+                "OL6304070A"
+            ],
+            "author_name": [
+                "John Kremer"
+            ],
+            "ebook_access": "no_ebook",
+            "edition_count": 16,
+            "first_publish_year": 2012,
+            "has_fulltext": false,
+            "key": "/works/OL25091907W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Pure Sport"
+        },
+        {
+            "author_key": [
+                "OL230632A"
+            ],
+            "author_name": [
+                "Michael Yessis"
+            ],
+            "cover_edition_key": "OL2737779M",
+            "cover_i": 7134303,
+            "ebook_access": "borrowable",
+            "edition_count": 3,
+            "first_publish_year": 1987,
+            "has_fulltext": true,
+            "ia": [
+                "secretsofsoviets00yess"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL1923740W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL2737779M",
+            "lending_identifier_s": "secretsofsoviets00yess",
+            "public_scan_b": false,
+            "title": "Secrets of Soviet sports fitness and training"
+        },
+        {
+            "author_key": [
+                "OL235035A"
+            ],
+            "author_name": [
+                "Angela Lumpkin"
+            ],
+            "cover_edition_key": "OL3945868M",
+            "cover_i": 1082903,
+            "ebook_access": "printdisabled",
+            "edition_count": 4,
+            "first_publish_year": 2002,
+            "has_fulltext": true,
+            "ia": [
+                "introductiontoph0000lump_5ed",
+                "introductiontoph0000lump_u0p4",
+                "introductiontoph00lump"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL1958329W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Introduction to physical education, exercise science, and sport studies"
+        },
+        {
+            "author_key": [
+                "OL234518A"
+            ],
+            "author_name": [
+                "Deborah A. Wuest"
+            ],
+            "cover_edition_key": "OL3560893M",
+            "cover_i": 63437,
+            "ebook_access": "printdisabled",
+            "edition_count": 12,
+            "first_publish_year": 2003,
+            "has_fulltext": true,
+            "ia": [
+                "foundationsofphy0000wues_y3i9",
+                "foundationsofphy0000wues_v4y2",
+                "foundationsofphy0000wues_b3b0",
+                "foundationsofphy0000wues_a9x6"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "marymount-ol",
+                "openlibrary-d-ol",
+                "printdisabled"
+            ],
+            "key": "/works/OL1954873W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Foundations of physical education, exercise science, and sport"
+        },
+        {
+            "author_key": [
+                "OL537056A"
+            ],
+            "author_name": [
+                "Mark H. Anshel"
+            ],
+            "cover_edition_key": "OL3563091M",
+            "cover_i": 1520310,
+            "ebook_access": "printdisabled",
+            "edition_count": 6,
+            "first_publish_year": 1990,
+            "has_fulltext": true,
+            "ia": [
+                "sportpsychologyf0000ansh",
+                "sportpsychologyf0000ansh_c5o1",
+                "sportpsychologyf0000ansh_a2u7"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL3286215W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport psychology"
+        },
+        {
+            "author_key": [
+                "OL530478A"
+            ],
+            "author_name": [
+                "Clark, Nancy"
+            ],
+            "cover_edition_key": "OL2189836M",
+            "cover_i": 4084128,
+            "ebook_access": "borrowable",
+            "edition_count": 4,
+            "first_publish_year": 1990,
+            "has_fulltext": true,
+            "ia": [
+                "nancyclarkssport00clar",
+                "isbn_9780736074155_0"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL3256044W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL2189836M",
+            "lending_identifier_s": "nancyclarkssport00clar",
+            "public_scan_b": false,
+            "title": "Sports nutrition guidebook"
+        },
+        {
+            "author_key": [
+                "OL404764A",
+                "OL2640449A"
+            ],
+            "author_name": [
+                "Robert A. Mechikoff",
+                "Steven G Estes"
+            ],
+            "cover_edition_key": "OL3425929M",
+            "cover_i": 1086218,
+            "ebook_access": "no_ebook",
+            "edition_count": 9,
+            "first_publish_year": 1993,
+            "has_fulltext": false,
+            "key": "/works/OL2757163W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "subtitle": "from ancient civilizations to the modern world",
+            "title": "A history and philosophy of sport and physical education"
+        },
+        {
+            "author_key": [
+                "OL897172A",
+                "OL8299197A"
+            ],
+            "author_name": [
+                "Ron Woods",
+                "B. Nalani Butler"
+            ],
+            "cover_edition_key": "OL29511607M",
+            "cover_i": 13606159,
+            "ebook_access": "no_ebook",
+            "edition_count": 4,
+            "first_publish_year": 2020,
+            "has_fulltext": false,
+            "key": "/works/OL21692176W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Social Issues in Sport"
+        },
+        {
+            "author_key": [
+                "OL2650014A",
+                "OL8148203A",
+                "OL8044408A"
+            ],
+            "author_name": [
+                "George Foster",
+                "Norman O'Reilly",
+                "Antonio Davila"
+            ],
+            "ebook_access": "no_ebook",
+            "edition_count": 7,
+            "first_publish_year": 2016,
+            "has_fulltext": false,
+            "key": "/works/OL21284542W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports Business Management"
+        },
+        {
+            "author_key": [
+                "OL6721509A",
+                "OL6785352A",
+                "OL2967869A"
+            ],
+            "author_name": [
+                "Andrew C. Billings",
+                "Michael L. Butterworth",
+                "Paul D. Turman"
+            ],
+            "cover_edition_key": "OL27411035M",
+            "cover_i": 8872968,
+            "ebook_access": "printdisabled",
+            "edition_count": 7,
+            "first_publish_year": 2012,
+            "has_fulltext": true,
+            "ia": [
+                "communicationspo0000bill_u6s2_ed2",
+                "communicationspo0000bill"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "ithacacollege-ol",
+                "marymount-ol",
+                "printdisabled",
+                "universityofcoloradoboulder-ol"
+            ],
+            "key": "/works/OL15976562W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Communication and sport"
+        },
+        {
+            "author_key": [
+                "OL9731007A"
+            ],
+            "author_name": [
+                "Karen Bill"
+            ],
+            "cover_edition_key": "OL23718778M",
+            "cover_i": 8722046,
+            "ebook_access": "no_ebook",
+            "edition_count": 4,
+            "first_publish_year": 2009,
+            "has_fulltext": false,
+            "key": "/works/OL18817977W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport management"
+        },
+        {
+            "author_key": [
+                "OL7045083A"
+            ],
+            "author_name": [
+                "Adam R. Nicholls"
+            ],
+            "cover_edition_key": "OL25246823M",
+            "cover_i": 12656154,
+            "ebook_access": "printdisabled",
+            "edition_count": 12,
+            "first_publish_year": 2013,
+            "has_fulltext": true,
+            "ia": [
+                "psychologyinspor0000nich",
+                "psychologyinspor0000nich_s9a4_2ndedition"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL16557857W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Psychology in sports coaching"
+        },
+        {
+            "author_key": [
+                "OL494266A"
+            ],
+            "author_name": [
+                "Rob Steen"
+            ],
+            "ebook_access": "no_ebook",
+            "edition_count": 10,
+            "first_publish_year": 2007,
+            "has_fulltext": false,
+            "key": "/works/OL3128263W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports journalism"
+        },
+        {
+            "author_key": [
+                "OL2910482A"
+            ],
+            "author_name": [
+                "Leslie J. Speight"
+            ],
+            "cover_edition_key": "OL8280505M",
+            "cover_i": 649019,
+            "ebook_access": "borrowable",
+            "edition_count": 6,
+            "first_publish_year": 1989,
+            "has_fulltext": true,
+            "ia": [
+                "sportsinjuries00lesl",
+                "thetravellersgui0000spei"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL8638935W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL19293553M",
+            "lending_identifier_s": "sportsinjuries00lesl",
+            "public_scan_b": false,
+            "title": "Sports injuries"
+        },
+        {
+            "author_key": [
+                "OL531799A",
+                "OL2775772A"
+            ],
+            "author_name": [
+                "Norman S. Barrett",
+                "David Salariya"
+            ],
+            "cover_edition_key": "OL9795162M",
+            "cover_i": 1272065,
+            "ebook_access": "borrowable",
+            "edition_count": 6,
+            "first_publish_year": 1993,
+            "has_fulltext": true,
+            "ia": [
+                "sportplayersgame0000barr_p2m1"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL3262792W",
+            "language": [
+                "rus",
+                "eng",
+                "fre"
+            ],
+            "lending_edition_s": "OL10464858M",
+            "lending_identifier_s": "sportplayersgame0000barr_p2m1",
+            "public_scan_b": false,
+            "title": "Sport"
+        },
+        {
+            "author_key": [
+                "OL1430439A"
+            ],
+            "author_name": [
+                "Heather Hedrick Fink"
+            ],
+            "cover_edition_key": "OL3410816M",
+            "cover_i": 1436027,
+            "ebook_access": "no_ebook",
+            "edition_count": 9,
+            "first_publish_year": 2006,
+            "has_fulltext": false,
+            "key": "/works/OL5834729W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Practical applications in sports nutrition"
+        },
+        {
+            "author_key": [
+                "OL1394510A"
+            ],
+            "author_name": [
+                "David Orme"
+            ],
+            "cover_edition_key": "OL10764639M",
+            "cover_i": 11714526,
+            "ebook_access": "borrowable",
+            "edition_count": 19,
+            "first_publish_year": 2002,
+            "has_fulltext": true,
+            "ia": [
+                "trailbikes0000orme",
+                "matchref0000orme",
+                "runningintotroub0000orme",
+                "hitit0000orme",
+                "divesurvive0000orme",
+                "upforit0000orme",
+                "skatingtodanger0000orme",
+                "hotskates0000orme",
+                "headtohead0000orme",
+                "crazysport0000orme",
+                "goaliesnightmare0000orme",
+                "inatdeepend0000orme"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL5736425W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL10764632M",
+            "lending_identifier_s": "trailbikes0000orme",
+            "public_scan_b": false,
+            "title": "Sports Zone"
+        },
+        {
+            "author_key": [
+                "OL325801A"
+            ],
+            "author_name": [
+                "James A. Michener"
+            ],
+            "cover_edition_key": "OL21443791M",
+            "cover_i": 4635756,
+            "ebook_access": "printdisabled",
+            "edition_count": 8,
+            "first_publish_year": 1976,
+            "has_fulltext": true,
+            "ia": [
+                "sportsinamerica00jame",
+                "sportsinameri00mich",
+                "sportsinamerica0000mich",
+                "sportsinamerica00mich"
+            ],
+            "ia_collection": [
+                "americana",
+                "barryuniversity-ol",
+                "binghamton-ol",
+                "drakeuniversity-ol",
+                "internetarchivebooks",
+                "kalamazoocollege-ol",
+                "occidentalcollegelibrary-ol",
+                "printdisabled",
+                "randolph-macon-college-ol",
+                "riceuniversity-ol",
+                "unb-ol",
+                "uni-ol",
+                "universityofarizona-ol",
+                "universityofcoloradoboulder-ol",
+                "universityofoklahoma-ol"
+            ],
+            "key": "/works/OL2385436W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports in America"
+        },
+        {
+            "author_key": [
+                "OL21218A"
+            ],
+            "author_name": [
+                "Leslie McFarlane"
+            ],
+            "cover_edition_key": "OL1167877M",
+            "cover_height": 3728,
+            "cover_i": 7026330,
+            "cover_width": 2480,
+            "ebook_access": "borrowable",
+            "edition_count": 2,
+            "first_publish_year": 1992,
+            "has_fulltext": true,
+            "ia": [
+                "sabotageatsports00dixo"
+            ],
+            "ia_collection": [
+                "inlibrary",
+                "internetarchivebooks",
+                "openlibrary-d-ol",
+                "printdisabled"
+            ],
+            "key": "/works/OL16493024W",
+            "language": [
+                "eng"
+            ],
+            "lending_edition_s": "OL1167877M",
+            "lending_identifier_s": "sabotageatsports00dixo",
+            "public_scan_b": false,
+            "title": "Sabotage at Sports City"
+        },
+        {
+            "author_key": [
+                "OL2493526A"
+            ],
+            "author_name": [
+                "David Epstein"
+            ],
+            "cover_edition_key": "OL32008038M",
+            "cover_i": 10675291,
+            "ebook_access": "no_ebook",
+            "edition_count": 6,
+            "first_publish_year": 2013,
+            "has_fulltext": false,
+            "key": "/works/OL24217516W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "The Sports Gene"
+        },
+        {
+            "author_key": [
+                "OL7663809A"
+            ],
+            "author_name": [
+                "Benjamin S. Flowers"
+            ],
+            "cover_edition_key": "OL27411285M",
+            "cover_i": 8873221,
+            "ebook_access": "printdisabled",
+            "edition_count": 6,
+            "first_publish_year": 2017,
+            "has_fulltext": true,
+            "ia": [
+                "sportarchitectur0000flow"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL20220842W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport and Architecture"
+        },
+        {
+            "author_key": [
+                "OL2641087A",
+                "OL2641088A",
+                "OL9760298A"
+            ],
+            "author_name": [
+                "Louise Burke",
+                "Vicki Deakin",
+                "Michelle Minehan"
+            ],
+            "cover_edition_key": "OL34784426M",
+            "cover_i": 13253240,
+            "ebook_access": "no_ebook",
+            "edition_count": 1,
+            "first_publish_year": 2021,
+            "has_fulltext": false,
+            "key": "/works/OL25802086W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Clinical Sports Nutrition 6th Edition"
+        },
+        {
+            "author_key": [
+                "OL3342770A"
+            ],
+            "author_name": [
+                "Dean Sewell"
+            ],
+            "cover_edition_key": "OL22376871M",
+            "cover_i": 11718514,
+            "ebook_access": "printdisabled",
+            "edition_count": 9,
+            "first_publish_year": 2005,
+            "has_fulltext": true,
+            "ia": [
+                "sportexercisesci0000sewe"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "ithacacollege-ol",
+                "printdisabled"
+            ],
+            "key": "/works/OL9288847W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport and exercise science"
+        },
+        {
+            "author_key": [
+                "OL235035A"
+            ],
+            "author_name": [
+                "Angela Lumpkin"
+            ],
+            "cover_edition_key": "OL674575M",
+            "cover_i": 4711793,
+            "ebook_access": "printdisabled",
+            "edition_count": 5,
+            "first_publish_year": 1990,
+            "has_fulltext": true,
+            "ia": [
+                "physicaleducatio00lump"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL1958331W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Physical education and sport"
+        },
+        {
+            "author_key": [
+                "OL2988632A",
+                "OL7657203A"
+            ],
+            "author_name": [
+                "Christine Karpinski",
+                "Christine A. Rosenbloom"
+            ],
+            "cover_edition_key": "OL27394252M",
+            "cover_i": 8856862,
+            "ebook_access": "no_ebook",
+            "edition_count": 2,
+            "first_publish_year": 2012,
+            "has_fulltext": false,
+            "key": "/works/OL20206401W",
+            "public_scan_b": false,
+            "title": "Sports Nutrition"
+        },
+        {
+            "author_key": [
+                "OL4378116A"
+            ],
+            "author_name": [
+                "David Tod"
+            ],
+            "cover_edition_key": "OL35580057M",
+            "cover_i": 14686522,
+            "ebook_access": "no_ebook",
+            "edition_count": 8,
+            "first_publish_year": 2014,
+            "has_fulltext": false,
+            "key": "/works/OL21269324W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport Psychology"
+        },
+        {
+            "author_key": [
+                "OL6769612A",
+                "OL7748423A",
+                "OL7748424A"
+            ],
+            "author_name": [
+                "Patrick K. Thornton",
+                "Walter T. Champion Jr.",
+                "Lawrence S. Ruddell"
+            ],
+            "cover_edition_key": "OL27665309M",
+            "cover_i": 9107878,
+            "ebook_access": "printdisabled",
+            "edition_count": 3,
+            "first_publish_year": 2011,
+            "has_fulltext": true,
+            "ia": [
+                "sportsethicsfors0000thor"
+            ],
+            "ia_collection": [
+                "internetarchivebooks",
+                "printdisabled"
+            ],
+            "key": "/works/OL20441854W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports Ethics for Sports Management Professionals"
+        },
+        {
+            "author_key": [
+                "OL3779849A",
+                "OL3319057A"
+            ],
+            "author_name": [
+                "James Higham",
+                "Tom Hinch"
+            ],
+            "cover_edition_key": "OL35538804M",
+            "cover_i": 12367994,
+            "ebook_access": "no_ebook",
+            "edition_count": 9,
+            "first_publish_year": 2010,
+            "has_fulltext": false,
+            "key": "/works/OL26331399W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sport Tourism Development"
+        },
+        {
+            "author_key": [
+                "OL8148347A",
+                "OL8148348A",
+                "OL8148349A"
+            ],
+            "author_name": [
+                "Tania G. Cassidy",
+                "Robyn L. L. Jones",
+                "Paul A. Potrac"
+            ],
+            "ebook_access": "no_ebook",
+            "edition_count": 9,
+            "first_publish_year": 2008,
+            "has_fulltext": false,
+            "key": "/works/OL21274344W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Understanding Sports Coaching"
+        },
+        {
+            "author_key": [
+                "OL8280392A",
+                "OL3867401A",
+                "OL9754030A"
+            ],
+            "author_name": [
+                "NSCA -National Strength & Conditioning Association",
+                "Duncan French",
+                "Lorena Torres Ronda"
+            ],
+            "ebook_access": "no_ebook",
+            "edition_count": 2,
+            "first_publish_year": 2021,
+            "has_fulltext": false,
+            "key": "/works/OL25788957W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "NSCA's Essentials of Sport Science"
+        },
+        {
+            "author_key": [
+                "OL1692401A"
+            ],
+            "author_name": [
+                "R. J. Foster"
+            ],
+            "ebook_access": "no_ebook",
+            "edition_count": 17,
+            "first_publish_year": 2015,
+            "has_fulltext": false,
+            "key": "/works/OL40337235W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Sports"
+        },
+        {
+            "author_key": [
+                "OL7866859A",
+                "OL7866860A",
+                "OL7866861A"
+            ],
+            "author_name": [
+                "Marie Spano",
+                "Laura Kruskall",
+                "D. Travis Thomas"
+            ],
+            "cover_edition_key": "OL27999179M",
+            "cover_i": 9384058,
+            "ebook_access": "no_ebook",
+            "edition_count": 7,
+            "first_publish_year": 2017,
+            "has_fulltext": false,
+            "key": "/works/OL20706563W",
+            "language": [
+                "eng"
+            ],
+            "public_scan_b": false,
+            "title": "Nutrition for Sport, Exercise, and Health"
+        }
+    ]
+}
