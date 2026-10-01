@@ -1,20 +1,21 @@
-# Function reference — Lectures 1–7
+# Function reference — Lectures 1–8
 
-Covers the local lecture notebooks, exercises, and imported scripts through Lecture 6 reviewed September 22, 2026; Lecture 7a–7c added September 27, 2026. Repeated functions appear once. This file is a reference snapshot; pulling new lectures does not automatically update it.
+Covers the local lecture notebooks, exercises, and imported scripts through Lecture 6 reviewed September 22, 2026; Lecture 7a–7c added September 27, 2026; Lecture 8a–8d and its example scripts added September 29, 2026. Repeated functions appear once. This file is a reference snapshot; pulling new lectures does not automatically update it.
 
 **Reading the syntax:** `df` = DataFrame; `s` = one column (Series); `a` = array; other unquoted names are placeholders to replace with your variables. Quoted text is a string; replace placeholder column names and paths inside the quotes. Entries show the inputs and options taught, not every option available in the library. Code blocks are syntax templates, not a script to run top to bottom.
 
 ## Packages and imports
 
-Run installation commands in the terminal, in your course environment. `json` and `time` are built into Python.
+Run installation commands in the terminal, in your course environment. `json`, `time`, and `functools` are built into Python.
 
 ```sh
-pip install numpy pandas matplotlib requests jmespath ipython beautifulsoup4 html5lib selenium webdriver-manager
+pip install numpy pandas matplotlib requests jmespath ipython beautifulsoup4 html5lib selenium webdriver-manager multiprocess
 # Alternative installation syntax from the lectures:
 conda install package_name
 conda install conda-forge::html5lib
 conda install conda-forge::selenium
 conda install conda-forge::webdriver-manager
+conda install conda-forge::multiprocess
 ```
 
 ```python
@@ -23,6 +24,8 @@ import pandas as pd                        # Tables and data manipulation.
 import matplotlib.pyplot as plt            # Charts.
 import requests                            # HTTP/API requests.
 import json                                # JSON encoding and decoding.
+import functools                           # Create function variants with fixed arguments.
+import multiprocess as mp                  # Run functions across processor workers.
 import jmespath                            # Search nested JSON data.
 from IPython.display import display, HTML   # Notebook display and HTML objects.
 from bs4 import BeautifulSoup              # Parse HTML.
@@ -101,6 +104,7 @@ np.sin(x)                         # Sine; x in radians.
 np.cos(x)                         # Cosine; x in radians.
 np.sqrt(x)                        # Square root; nonnegative real inputs.
 np.round(a, decimals)             # Round to an integer number of decimal places.
+np.sum(a)                         # Sum array elements (used again in Lecture 8).
 np.mean(a)                        # Arithmetic mean.
 np.std(a)                         # Standard deviation; population (ddof=0) by default.
 np.min(a)                         # Minimum.
@@ -560,3 +564,91 @@ ax.set_xlabel("label")        # X-axis label for that subplot.
 ax.set_ylabel("label")        # Y-axis label for that subplot.
 plt.tight_layout()           # Adjust subplot spacing; call after labels, before show/save.
 ```
+
+## Lecture 8 — Functions, mapping, scripts, and multiprocessing (8a–8d)
+
+### Define and call functions — 8a
+
+```python
+def function_name(parameter1, parameter2):  # Define a reusable function; colon required.
+    result = expression                     # Parameters and intermediate values are local.
+    return result                           # Send a value back to the caller.
+
+function_name(argument1, argument2)         # Positional arguments follow parameter order.
+function_name(parameter1=value1, parameter2=value2)  # Keyword arguments use parameter names.
+
+function_name = lambda parameter1, parameter2: expression
+# A lambda is a one-expression function; its expression is returned automatically.
+```
+
+Defining a function does not run its body. Call it with parentheses to run it. `return value` makes a result available to the caller; `print(value)` only displays it. A function without `return` returns `None`. The lecture uses `fn_` as an optional naming convention for function objects.
+
+```python
+def fn_agebracket(age):
+    if age >= 18:
+        status = "Adult"
+    elif (age >= 10) & (age < 18):
+        status = "Adolescent"
+    else:
+        status = "Child"
+    return status
+```
+
+### Apply and map functions over values — 8b and 8d
+
+```python
+s.apply(function_name)                    # Apply a one-argument function to each Series value.
+s.apply(lambda value: expression)         # Define the elementwise function inline.
+map(function_name, iterable1)             # Lazy map object: one function result per item.
+list(map(function_name, iterable1))       # Materialize mapped results as a list.
+list(map(function_name, iterable1, iterable2))  # Pass paired items to a two-argument function.
+```
+
+With multiple iterables, `map` stops when the shortest iterable is exhausted. Assign the result to a DataFrame column to create or replace it; the result length must match the number of rows.
+
+```python
+df["new_column"] = df["column"].apply(function_name)
+df["new_column"] = list(map(function_name, df["column1"], df["column2"]))
+```
+
+Use `df.drop(columns=[...])` from Lecture 4 to remove columns after mapping.
+
+### Run and import external Python scripts — 8b
+
+```python
+import scripts.example_functions as ef            # Import a module with an alias.
+ef.fn_quadratic(x)                                 # Access an imported function through the alias.
+import scripts.example_variables as ev
+ev.alpha                                           # Access an imported module variable.
+```
+
+An imported `.py` file is a module; a folder containing modules can be a package. The `exec(open(...).read())` pattern from Lecture 5 runs a script that can read and modify names in the current environment. Imported module contents stay in the module namespace and are referenced as `alias.name`, reducing accidental name collisions.
+
+### Multiprocessing and partial functions — 8c
+
+```python
+mp.cpu_count()                              # Number of logical CPUs available to Python.
+
+with mp.Pool(processes) as pool:            # Create and automatically close a worker pool.
+    results = pool.map(function_name, items) # Apply function in parallel; preserve item order.
+
+functools.partial(function_name, parameter=value)  # New callable with an argument fixed.
+```
+
+`processes` is a positive integer, often stored from `mp.cpu_count()`. The mapped function must accept one item from `items`; use `functools.partial` to fix its other arguments. Pool workers run separately, so do not rely on them to update ordinary variables in the notebook. When each result is a DataFrame, combine the returned list with `pd.concat(results)`.
+
+### Local and global variables — 8d
+
+```python
+global_name = value                  # A name assigned outside a function is global.
+
+def function_name(parameter):
+    local_name = expression          # Parameter and assigned name are local to this call.
+    return local_name
+
+def modify_global():
+    global global_name               # Declare assignment to the existing global name.
+    global_name = new_value
+```
+
+A function can read a global name, but the lecture recommends passing every input as a parameter. Local names exist only during the call and take precedence over same-named globals. Use `global` only when the function intentionally must reassign a module-level variable; returning a value and assigning it outside the function is usually clearer.
