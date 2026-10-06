@@ -1,6 +1,6 @@
-# Function reference — Lectures 1–8
+# Function reference — Lectures 1–9
 
-Covers the local lecture notebooks, exercises, and imported scripts through Lecture 6 reviewed September 22, 2026; Lecture 7a–7c added September 27, 2026; Lecture 8a–8d and its example scripts added September 29, 2026. Repeated functions appear once. This file is a reference snapshot; pulling new lectures does not automatically update it.
+Covers the local lecture notebooks, exercises, and imported scripts through Lecture 6 reviewed September 22, 2026; Lecture 7a–7c added September 27, 2026; Lecture 8a–8d and its example scripts added September 29, 2026; Lecture 9a–9d added October 1, 2026. Repeated functions appear once. This file is a reference snapshot; pulling new lectures does not automatically update it.
 
 **Reading the syntax:** `df` = DataFrame; `s` = one column (Series); `a` = array; other unquoted names are placeholders to replace with your variables. Quoted text is a string; replace placeholder column names and paths inside the quotes. Entries show the inputs and options taught, not every option available in the library. Code blocks are syntax templates, not a script to run top to bottom.
 
@@ -9,13 +9,14 @@ Covers the local lecture notebooks, exercises, and imported scripts through Lect
 Run installation commands in the terminal, in your course environment. `json`, `time`, and `functools` are built into Python.
 
 ```sh
-pip install numpy pandas matplotlib requests jmespath ipython beautifulsoup4 html5lib selenium webdriver-manager multiprocess
+pip install numpy pandas matplotlib requests jmespath ipython beautifulsoup4 html5lib selenium webdriver-manager multiprocess wordcloud
 # Alternative installation syntax from the lectures:
 conda install package_name
 conda install conda-forge::html5lib
 conda install conda-forge::selenium
 conda install conda-forge::webdriver-manager
 conda install conda-forge::multiprocess
+conda install wordcloud
 ```
 
 ```python
@@ -26,6 +27,7 @@ import requests                            # HTTP/API requests.
 import json                                # JSON encoding and decoding.
 import functools                           # Create function variants with fixed arguments.
 import multiprocess as mp                  # Run functions across processor workers.
+from wordcloud import WordCloud, STOPWORDS  # Word clouds and default words to exclude.
 import jmespath                            # Search nested JSON data.
 from IPython.display import display, HTML   # Notebook display and HTML objects.
 from bs4 import BeautifulSoup              # Parse HTML.
@@ -652,3 +654,151 @@ def modify_global():
 ```
 
 A function can read a global name, but the lecture recommends passing every input as a parameter. Local names exist only during the call and take precedence over same-named globals. Use `global` only when the function intentionally must reassign a module-level variable; returning a value and assigning it outside the function is usually clearer.
+
+## Lecture 9 — Text data, word clouds, and classes (9a–9d)
+
+Reviewed against the current notebooks and completed exercises on October 5, 2026.
+
+### Text frequencies, filtering, and replacement — 9a
+
+```python
+s.value_counts()                       # Count distinct values; descending counts, missing values excluded.
+df.query("category in @categories")    # Keep categories in an external list named categories.
+s.str.contains("text")                # Test each string for a match; case-sensitive, regex by default.
+s.str.contains("text", regex=False, na=False)  # Literal substring; missing values become False.
+s.str.replace("old", "new", regex=False)     # Replace literal substrings within each string.
+s.str.findall(r"pattern")             # List of all non-overlapping regex matches in each string.
+```
+
+Use `df[s.str.contains(..., na=False)]` to filter rows and `.mean()` on a Boolean result to calculate the proportion matching. `.str.replace()` changes text inside values; `s.replace()` from Lecture 3 replaces whole values. Assign the returned result to retain changes. When adding a column to a filtered table, create an independent table with `.copy()` first.
+
+### Regular expression syntax — 9a
+
+Use raw strings such as `r"Amdt\.\d*"` so Python passes backslashes to the regex engine. A regex match is case-sensitive unless configured otherwise.
+
+| Pattern | Meaning |
+| --- | --- |
+| `\d` | One digit. |
+| `\D` | One non-digit character. |
+| `\s` | One whitespace character, including spaces, tabs, and newlines. |
+| `\S` | One non-whitespace character. |
+| `.` | One character other than a newline by default. |
+| `\.` | A literal period. |
+| `*` | Zero or more repetitions of the preceding pattern; greedy by default. |
+| `?` | Zero or one occurrence of the preceding pattern. |
+
+```python
+s.str.findall(r"Amdt\.\d*")  # 'Amdt.' followed by zero or more digits; includes the prefix.
+s.str.findall(r".Amdt\.")    # One character before 'Amdt.'.
+s.str.findall(r".*Amdt\.")   # Text through 'Amdt.'; greedy .* can span earlier occurrences.
+s.str.findall(r"Senator \S*") # 'Senator ' followed by consecutive non-whitespace characters.
+s.str.findall(r"Senator\s\S")  # 'Senator', one whitespace character, and the next non-whitespace character.
+s.str.findall(r"Senator\s\S*") # Same prefix, followed by zero or more non-whitespace characters.
+```
+
+`*` allows an empty match for the part it repeats: the first example can match `"Amdt."` without a number. `\S*` can include punctuation and stops at whitespace, so it does not reliably extract an entire person's name. For a nonmissing string with no matches, `.str.findall()` returns an empty list.
+
+### Join text and create word clouds — 9b
+
+```python
+"separator".join(strings)               # Combine strings, placing the separator between items.
+text = " ".join(df["text_column"])     # Combine a text column with spaces between records.
+# All items must be strings; handle missing values before joining.
+
+STOPWORDS                              # Default set of common words excluded from word clouds.
+stop_words = list(STOPWORDS) + ["custom", "words"]  # Extend the default exclusions.
+
+cloud = WordCloud(
+    background_color="white",
+    stopwords=stop_words,
+    width=400,
+    height=200,
+    relative_scaling=0.9
+)
+cloud.generate(text)                   # Generate a cloud from a string; returns the cloud object.
+cloud.process_text(text)               # Return a dictionary of processed words and frequencies.
+```
+
+The constructor options are optional. `width` and `height` are pixel dimensions. `relative_scaling` ranges from 0 (rank only) to 1 (frequency ratios), or can be `"auto"`. Omit `stopwords` to use `STOPWORDS`; use `stopwords=[]` to exclude none. Generation needs at least one word remaining after processing. The notebook uses `"".join(...)`; a space separator avoids merging the last word of one record with the first word of the next.
+
+Passing `stopwords=["the", "and", "to"]` replaces the default stopword collection with that list. To keep the default exclusions and add your own, use the `list(STOPWORDS) + [...]` pattern above.
+
+```python
+plt.imshow(cloud)                      # Display the generated cloud as an image.
+plt.axis("off")                        # Hide axes, ticks, and borders.
+ax.imshow(cloud)                       # Display on one Axes from plt.subplots().
+ax.axis("off")                         # Hide axes on that subplot.
+```
+
+For subgroup comparisons, filter each group with `query`, join its text, and generate a separate cloud. Use `plt.subplots()` and `ax.set_title()` from Lecture 7 to arrange and label the panels.
+
+### Classes, instances, and attributes — 9c
+
+```python
+class Course:                          # Class definition; colon and indented body required.
+    hours = 9                          # Class attribute: a shared default.
+
+course = Course()                      # Create an instance; parentheses required.
+Course.hours                          # Read the class attribute.
+course.hours                          # Read through the instance; no parentheses for attributes.
+course.hours = 4                       # Set an instance attribute, overriding its class default.
+Course.hours = 5                       # Change the shared class attribute.
+```
+
+An instance is an object created from a class. Class attributes are looked up when an instance has no attribute of its own with that name. Changing `Course.hours` therefore affects both new and existing instances that have not overridden `hours`; `course.hours` stays 4 in the example. Instances do not automatically receive independent copies of every class attribute. Store data specific to each instance using `self` in `__init__`.
+
+### Initialize instances and call methods — 9c
+
+```python
+class Teacher:
+    def __init__(self, first_name, last_name):  # Two underscores before and after init.
+        self.first_name = first_name           # Store data on this instance.
+        self.last_name = last_name
+
+    def modify_lastname(self, last_name):      # A function in a class is a method.
+        self.last_name = last_name
+
+    def message(self):
+        return f"{self.first_name} {self.last_name}"
+
+teacher = Teacher("Alejandro", "Sanchez")    # __init__ runs when the instance is created.
+teacher.modify_lastname("Sanchez-Becerra")   # Change the instance's stored attribute.
+teacher.message()                            # Call a method with parentheses.
+```
+
+`self` is the conventional name for the current instance. Include it as the first parameter in instance-method definitions; Python supplies it automatically when calling a method through an instance. `__init__` initializes attributes and should not return a value. Other methods can return results, print messages, or update attributes, just as ordinary functions can.
+
+### Inheritance — 9c
+
+```python
+class Student(Teacher):                # Child class inherits attributes and methods from Teacher.
+    def __init__(self, first_name, last_name, program):
+        super().__init__(first_name, last_name)  # Run the parent initializer in this example.
+        self.program = program                  # Add a child-specific attribute.
+
+student = Student("Alejandro", "Sanchez", "Data Science Masters")
+student.message()                     # Use an inherited method.
+student.program                       # Access the added attribute.
+```
+
+### Store and analyze text in a class — 9d
+
+```python
+text.lower()                          # Return a lowercase copy of a string.
+text.split()                          # Split on whitespace into a list; no separator argument needed.
+words.count(word)                     # Count exact matches in a list of words.
+
+class TextAnalysis:
+    def __init__(self, text):
+        self.text = text
+
+    def count_word(self, word):
+        words = self.text.lower().split()
+        return words.count(word.lower())
+
+document = TextAnalysis("The bill is a Senate bill")
+document.count_word("BILL")           # Returns 2; lowercase conversion makes this case-insensitive.
+document.text = "The House passed the bill"  # Replace stored text for subsequent method calls.
+```
+
+Splitting on whitespace leaves punctuation attached: `"bill."` does not match `"bill"`. Each instance stores its own text and uses the same method definition. `WordCloud` uses the same instance-and-method pattern: create an object, then call its `.generate(text)` method.
