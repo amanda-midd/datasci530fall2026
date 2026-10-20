@@ -1,15 +1,18 @@
-# Function reference — Lectures 1–9
+# Function reference — Lectures 1–12
 
-Covers the local lecture notebooks, exercises, and imported scripts through Lecture 6 reviewed September 22, 2026; Lecture 7a–7c added September 27, 2026; Lecture 8a–8d and its example scripts added September 29, 2026; Lecture 9a–9d added October 1, 2026. Repeated functions appear once. This file is a reference snapshot; pulling new lectures does not automatically update it.
+Covers Lectures 1–12, audited October 15, 2026 against 47 local notebooks (including exercises and optional material), five supporting Python scripts, and the Lecture 5 introductory slides. Includes calls in code, examples in Markdown/comments, named exercise functions, and formatting shown in reference figures. Repeated library functions share entries; distinct receiver types and important options are described separately. This is a reference snapshot; pulling new lectures does not automatically update it. External reading links are not additional lecture content.
 
 **Reading the syntax:** `df` = DataFrame; `s` = one column (Series); `a` = array; other unquoted names are placeholders to replace with your variables. Quoted text is a string; replace placeholder column names and paths inside the quotes. Entries show the inputs and options taught, not every option available in the library. Code blocks are syntax templates, not a script to run top to bottom.
 
+Functions defined by the lectures must be defined or imported before use; see each lecture's custom-function entries. Imported-only helpers have a separate section with explicitly supplemental examples. Corrections to notebook typos are collected at the end.
+
 ## Packages and imports
 
-Run installation commands in the terminal, in your course environment. `json`, `time`, and `functools` are built into Python.
+Run installation commands in the terminal, in your course environment. `json`, `time`, `functools`, `os`, and `datetime` are built into Python. Lecture 9b also shows `!pip install wordcloud` in a notebook cell; `!` runs a shell command and is not valid ordinary Python script syntax.
 
 ```sh
 pip install numpy pandas matplotlib requests jmespath ipython beautifulsoup4 html5lib selenium webdriver-manager multiprocess wordcloud
+pip install statsmodels maketables linearmodels scikit-learn patsy
 # Alternative installation syntax from the lectures:
 conda install package_name
 conda install conda-forge::html5lib
@@ -17,6 +20,8 @@ conda install conda-forge::selenium
 conda install conda-forge::webdriver-manager
 conda install conda-forge::multiprocess
 conda install wordcloud
+conda install statsmodels
+conda install -c conda-forge linearmodels
 ```
 
 ```python
@@ -25,9 +30,21 @@ import pandas as pd                        # Tables and data manipulation.
 import matplotlib.pyplot as plt            # Charts.
 import requests                            # HTTP/API requests.
 import json                                # JSON encoding and decoding.
+import os                                  # Working directory, paths, and folders.
 import functools                           # Create function variants with fixed arguments.
 import multiprocess as mp                  # Run functions across processor workers.
 from wordcloud import WordCloud, STOPWORDS  # Word clouds and default words to exclude.
+import statsmodels.api as sm               # Matrix-based statistical models and families.
+import statsmodels.formula.api as smf       # Formula-based statistical models.
+import maketables as mt                    # Regression tables and export.
+import patsy                               # Build response/design matrices from formulas.
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
+from matplotlib import ticker
+import matplotlib.dates as mdates
+from linearmodels.datasets import wage_panel
+from linearmodels.panel import BetweenOLS, FirstDifferenceOLS, PanelOLS, PooledOLS, RandomEffects
 import jmespath                            # Search nested JSON data.
 from IPython.display import display, HTML   # Notebook display and HTML objects.
 from bs4 import BeautifulSoup              # Parse HTML.
@@ -49,6 +66,8 @@ from selenium.webdriver.remote.command import Command  # WebDriver commands.
 
 Excel `.xlsx` read/write may additionally require `openpyxl` (`pip install openpyxl`); no import is needed. Chrome must be installed for the browser sections. `HTML` is imported in Lecture 5; rendering there uses `%%html`.
 
+Additional imports without demonstrated calls in Lectures 11–12: `from datetime import date, time, datetime` (standard library), `from linearmodels.datasets import mroz`, `from linearmodels.iv import IV2SLS`, `from sklearn.metrics import classification_report`, and `from statsmodels.iolib.summary2 import summary_col`. Importing `time` from `datetime` replaces the name of the `time` module if both imports are run in one environment.
+
 ## Lecture 1 — Python basics, files, and NumPy
 
 ### Built-ins and basic formatting
@@ -57,6 +76,9 @@ Excel `.xlsx` read/write may additionally require `openpyxl` (`pip install openp
 print(value)                  # Print a value; print(value1, value2) prints several.
 type(value)                   # Return its type: int, float, str, list, etc.
 str(value)                    # Convert to a string.
+int(value)                    # Integer conversion; truncates a float toward zero.
+float(value)                  # Floating-point conversion; e.g. float("3.5").
+bool(value)                   # Truth-value conversion; empty objects and numeric zero are False.
 list(iterable)                # Convert an iterable to a list.
 len(obj)                      # Number of items; for a DataFrame, number of rows.
 display(obj)                  # Rich notebook display, including tables.
@@ -67,6 +89,7 @@ True                          # Boolean literals are True and False, unquoted.
 [value1, value2]               # List: square brackets, comma-separated values.
 {"key1": value1, "key2": value2}  # Dictionary: key:value pairs in braces.
 items[i]                      # List/array index: first item is 0.
+items[-1]                     # Last item; negative indices count backward from the end.
 items[start:stop]              # Slice includes start, excludes stop.
 items[i][j]                   # Index a nested list.
 mapping["key"]                # Retrieve a dictionary value by key.
@@ -77,6 +100,8 @@ list1 + list2                 # Join lists.
 x + y; x - y; x * y; x / y     # Arithmetic; parentheses control grouping.
 x ** power                    # Exponentiation; **, not ^.
 ```
+
+`int`, `float`, `str`, and `bool` are also type objects, used without parentheses in type checks such as `isinstance(value, int)`. These conversion examples explain the types introduced in the lectures. A tuple is written `(value1, value2)`; a one-item tuple needs a trailing comma: `(value,)`. Do not name a variable `list`, `str`, or another built-in you need to call later.
 
 ### Read and write datasets
 
@@ -123,6 +148,7 @@ np.random.seed(seed)                          # Integer seed; set before drawing
 np.random.normal(loc=mean, scale=sd, size=n)   # Normal draws; sd >= 0; n is number of draws.
 np.random.chisquare(df=degrees, size=n)        # Chi-square draws; degrees > 0.
 np.random.choice(values, size=n, p=probabilities)  # Draw from a 1D list/array (Lecture 2).
+# Lecture 10 also names the first argument: np.random.choice(a=values, size=n, p=probabilities).
 # p: one nonnegative probability per value; probabilities must sum to 1.
 # choice samples with replacement by default; omit p for equal probabilities.
 ```
@@ -193,6 +219,8 @@ df[condition]                  # Keep rows where a Boolean Series is True (Lectu
 df.loc[condition, "column"]    # Select rows by condition and column by label (Lecture 3).
 df.loc[condition, ["column"]]  # List of labels retains a DataFrame.
 df.loc[condition, "column"] = value  # Assign into selected rows.
+df.loc[["row_label1", "row_label2"]]  # Select rows by labels, not integer positions.
+df.describe().loc[["mean", "std"]]    # Keep two summary rows (Lecture 10c).
 df.copy()                      # Independent DataFrame copy (Lecture 3).
 ```
 
@@ -248,6 +276,8 @@ s.std()                              # Sample standard deviation (ddof=1).
 s.min()                              # Minimum.
 s.max()                              # Maximum.
 s.sum()                              # Sum.
+df.mean()                            # Column means for a numeric DataFrame.
+df.std()                             # Column sample standard deviations; ddof=1.
 pd.crosstab(index=s, columns="count") # Frequency table with a custom column label (Lecture 1).
 table.columns.name = "label"         # Name the column axis, not the individual columns.
 
@@ -358,6 +388,18 @@ with open("folder/file.txt", "w") as file:
 
 exec(code_string)             # Execute Python source text.
 exec(open("./scripts/import_packages.py").read())  # Run the lecture import script.
+os.getcwd()                  # Current working directory as a string.
+os.path.join(base_dir, "folder", "file.json")  # Build a path using OS separators.
+os.makedirs("folder/subfolder", exist_ok=True)  # Create parent folders; allow an existing folder.
+```
+
+Relative paths are resolved from the working directory, not necessarily the notebook's location. Import `os` before the Lecture 5b path examples. Use the actual response variable when saving; a name such as `AI_search_results` must already have been assigned.
+
+Lecture 5 also splits long expressions across lines. Parentheses allow line breaks inside an expression; a backslash at the end of a line explicitly continues it and must not be followed by a comment or other characters.
+
+```python
+message = ("First part "
+           + "second part")
 ```
 
 ### API requests and JSON
@@ -367,8 +409,11 @@ requests.get(url)                       # HTTP GET; url is a complete URL string
 response.json()                         # Decode response JSON into Python objects.
 requests.get(url).json()                # Request and decode in one chain.
 json.dumps(obj, indent=4)               # Python dict/list → JSON string; indent is optional.
+json.dump(obj, file, indent=4)          # Write JSON directly to an already-open text file.
 json.loads(json_text)                   # JSON string → Python dict/list/scalar.
 mapping.keys()                         # View dictionary keys, not nested keys.
+mapping.get("key")                     # Retrieve a value; missing key returns None.
+mapping.get("key", default_value)      # Use a chosen fallback for an absent key.
 jmespath.search("expression", obj)     # Query decoded data; expression is a string.
 ```
 
@@ -383,6 +428,8 @@ JMESPath expression formats:
 
 JSON text uses double-quoted keys/strings and `true`/`false`/`null`; decoded Python uses dictionaries/lists and `True`/`False`/`None`.
 
+Use `with open("folder/file.json", "w") as file:` followed by an indented `json.dump(obj, file, indent=4)` to save JSON directly. `json.dumps` returns a string, while `json.dump` writes to a file and returns `None`. Dictionary `.get()` only substitutes its default for an absent key, not for an existing key whose value is `None`.
+
 ### HTML syntax taught alongside the functions
 
 `%%html` must be the first line of a Jupyter code cell; put raw HTML on subsequent lines.
@@ -393,11 +440,15 @@ JSON text uses double-quoted keys/strings and `true`/`false`/`null`; decoded Pyt
 | `<html>…</html>`, `<head>…</head>`, `<body>…</body>` | Document, metadata section, visible content. |
 | `<title>text</title>` | Document title inside head. |
 | `<meta name="name" content="value">` | Metadata; no closing tag. |
+| `<meta charset="utf-8">` | Specify the document character encoding. |
+| `<header>…</header>`, `<span>…</span>` | Header region and inline text container; also used for targeting in Lecture 6. |
 | `<div class="class_name">…</div>` | Section with a CSS class. |
 | `<p>text</p>`, `<h1>text</h1>`, `<br>` | Paragraph, heading, line break. |
 | `<!-- comment -->` | HTML comment. |
 | `<style>.class_name { property: value; }</style>` | CSS class rule; leading dot, braces, colon, semicolon. |
 | `<form>…</form>` | Form container. |
+| `<form action="/action_page.php">…</form>` | Form whose submission targets the given address. |
+| `<input type="submit" value="Submit">` | Submit control for a form. |
 | `<select><option value="value">label</option></select>` | Dropdown; value is internal, label is visible. |
 | `<label for="field_id">text</label>` | Label; for must match the input's id. |
 | `<input type="text" id="field_id" value="text">` | Text field; no closing tag. |
@@ -655,6 +706,35 @@ def modify_global():
 
 A function can read a global name, but the lecture recommends passing every input as a parameter. Local names exist only during the call and take precedence over same-named globals. Use `global` only when the function intentionally must reassign a module-level variable; returning a value and assigning it outside the function is usually clearer.
 
+### Exact custom-function names from Lecture 8
+
+These are user-defined examples, not built-in Python functions. The signatures below omit `self` because Python supplies it for bound method calls. Redefining a name replaces its previous definition in the current environment.
+
+| Lecture | Call / definition name | Inputs, behavior, and return value |
+| --- | --- | --- |
+| 8a | `function_v(P, r, n, t)`; `fn_v(P, r, n, t)` | Compound value `P * (1 + r/n)**(n*t)`; `n` must not be zero. `fn_v` is the lambda version. The comment's `fn_compute_value` is a suggested name, not another implemented function. |
+| 8a | `function_poly(x)` | Return `x**2 + 2*x + 1`. |
+| 8a | `fn_grade(numeric_grade)` | Print `"pass"` for grades at least 55, otherwise `"fail"`; the current code returns `None`. The exercise asks for a returned status, which would require `return status`. |
+| 8a | `fn_name_car(first_name, last_name, car_model)` | Print the customer/car message with f-strings and newlines; current code returns `None`, rather than the string requested in the exercise. |
+| 8a | `fn_sum(x, y, z)` | Lambda returning the sum of three arguments. |
+| 8b, 8d | `fn_sum(x, y)` | Redefined lambda returning the sum of two arguments; used by `map`. |
+| 8a–8d | `fn_iseligible_vote(age)` | Return the Boolean test `age >= 18`. |
+| 8b, 8d | `fn_istwenties(age)` | Return `(age >= 20) & (age < 30)`. |
+| 8b, 8d | `fn_agebracket(age)` | Return `"Adult"` for age ≥18, `"Adolescent"` for 10–17, otherwise `"Child"`. |
+| 8b script | `ef.fn_quadratic(x)` | Return `x**2`; `ef` aliases `scripts.example_functions`. |
+| 8b script | `ef.fn_cubic(x)` | The provided script actually returns `x**2`, despite its name; a cubic would use `x**3`. |
+| 8b script | `ef.message_hello(x)` | Return `"hi " + x`; x must be a string. |
+| 8c | `fn_twoarguments(x, y)` | Lambda returning `x + y`. |
+| 8c | `fn_oneargument(x)` | Callable made with `functools.partial(fn_twoarguments, y=2)`; returns `x + 2`. |
+| 8c | `bubble_sort(x)` | First definition doubles an array; the later definition returns a one-row DataFrame with `x_bar=np.sum(x)` and `xsd=np.std(x)`. Neither version sorts; `x_bar` is a sum despite the label. |
+| 8c | `simulate_estimator(iteration)` | Draw a uniform sample using global `sample_size`; return a one-row DataFrame with mean `xbar` and standard deviation `xsd`. `iteration` is accepted for `pool.map` but unused in the calculation. |
+| 8d | `fn_add_recommended(x, y, z)` | Return `x + y + z`, with every input passed explicitly. |
+| 8d | `fn_add_notrecommended(x, y)` | Return `x + y + z` using global z; fails if z is undefined. |
+| 8d | `fn_square(x)` | Return `x**2` using a local intermediate y; does not reassign global x or y. |
+| 8d | `modify_x()` | Add 5 to global x in place; x must exist first; returns `None`. |
+
+`my_function(parameter)` and `myfunction` in the prose are placeholder names for the `def`, `lambda`, `apply`, and `map` templates, not additional library functions. `example_script.py` creates `message_output` from an existing `message`; it does not define a function. `example_variables.py` defines module attributes `alpha`, `beta`, `gamma`, `delta`, and `epsilon`, accessed through `ev.name`.
+
 ## Lecture 9 — Text data, word clouds, and classes (9a–9d)
 
 Reviewed against the current notebooks and completed exercises on October 5, 2026.
@@ -802,3 +882,387 @@ document.text = "The House passed the bill"  # Replace stored text for subsequen
 ```
 
 Splitting on whitespace leaves punctuation attached: `"bill."` does not match `"bill"`. Each instance stores its own text and uses the same method definition. `WordCloud` uses the same instance-and-method pattern: create an object, then call its `.generate(text)` method.
+
+### Exact custom-class names from Lecture 9
+
+The earlier examples use shorter illustrative class names; these are the names in the actual notebooks. Run each class definition before creating its instances.
+
+| Call / attribute | Use and behavior |
+| --- | --- |
+| `dsci_template()` | Create an instance using the class defaults `lecture1`, `lecture2`, `lecture3`, and `hours`; no constructor arguments. |
+| `student_template(first_name_arg, last_name_arg)` | Initialize instance attributes `first_name` and `last_name`. |
+| `teacher_template(first_name_arg, last_name_arg)` | Initialize a teacher with the same two instance attributes. |
+| `teacher.modify_lastname_fn(last_name_arg)` | Replace `teacher.last_name`; returns `None`. |
+| `teacher.message_fn()` | Print first and last names; returns `None`. |
+| `dsci_template_input(first_name_arg, last_name_arg)` | Combine course class defaults with instance-specific names. |
+| `student_messages(first_name, last_name, program)` | Initialize the parent through `super().__init__` and add `program`. |
+| `student.messages()` | Print the student's name and program; returns `None`. |
+| `text_template(text_arg)` | Store `text_arg` as the instance's `.text`. |
+| `document.count_word(word_arg)` | Count exact whitespace-separated tokens after lowercasing both text and target; return an integer. |
+| `weekday_template()` | Named exercise: define class defaults `message`, `class1`, and `class2`, then customize instances. No implementation is provided in the exercise cell. |
+| `movie_template(name, year, quantity_sales, price_tickets)` | Named exercise: define an initializer storing these four attributes. |
+| `movie.compute_revenue()` | Named exercise method: compute `self.quantity_sales * self.price_tickets`; use `return` to make that value available to the caller. |
+
+## Lecture 10 — Linear regression, model tables, and custom prediction (10a–10d)
+
+### Fit OLS and inspect results — 10a–10c
+
+```python
+model = smf.ols(formula="y ~ x", data=df)  # Specify an ordinary least squares model.
+results = model.fit(cov_type="HC1")       # Fit with HC1 heteroskedasticity-robust standard errors.
+results.params                           # Series of estimated coefficients; no parentheses.
+results.params["Intercept"]              # Intercept by name.
+results.params["x"]                      # Slope by name; avoid ambiguous integer indexing.
+results.summary()                        # Detailed regression diagnostics and table.
+print(results.summary())                 # Print the text summary.
+round(value, 3)                          # Python built-in rounding to 3 decimal places.
+abs(value)                               # Absolute value; also used inside df.query().
+```
+
+Use `cov_type="HC1"`, not Lecture 10a's `cov="HC1"`, to request robust standard errors; see the [OLS fit parameters](https://www.statsmodels.org/v0.12.2/generated/statsmodels.regression.linear_model.OLS.fit.html). Robust covariance changes standard errors, not the OLS coefficient estimates. Fit before accessing result attributes.
+
+### Regression formulas — 10b–10c
+
+Formulas are quoted strings; column names inside them are generally unquoted. The formula interface includes an intercept by default.
+
+| Formula | Meaning |
+| --- | --- |
+| `"y ~ x"` | Outcome y explained by x and an intercept. |
+| `"y ~ x + z"` | Include x and z as separate regressors. |
+| `'y ~ x + Q("z with spaces")'` | Quote a column name containing spaces with `Q()`. |
+| `"y ~ x + C(d)"` | Treat d as categorical; compare included levels with a reference level. |
+| `"y ~ x + z + x:z"` | Include main effects and their interaction. |
+| `"y ~ x * z"` | Shorthand for `x + z + x:z`. |
+| `"y ~ x + I(x ** 2)"` | Include x and its square; syntax support for the polynomial exercise in Lecture 12b. `I()` protects arithmetic from formula-operator interpretation. |
+
+`C()` and `Q()` here belong to formula syntax. In Lecture 10c, `treat * ave` allows the treatment difference to vary with baseline scores. The formula `treat + ave + treat*ave` repeats main effects in its text, but the formula parser includes each term only once.
+
+### Display and export regression tables — 10b–10c
+
+```python
+table = mt.ETable([results], model_heads=["Model 1"])
+table.make(type="gt")                    # Render a formatted table in the notebook.
+
+comparison = mt.ETable(
+    [results1, results2],
+    model_heads=["Model 1", "Model 2"],
+    keep=["x", "z", "z:x", "C(d)[T.2]"],
+    exact_match=True,
+    model_stats=["N", "r2"],
+    model_stats_labels={"N": "Observations", "r2": "R-squared"},
+    caption="Regression Results",
+)
+comparison.make(type="gt")
+comparison.save(
+    type="docx", file_name="results/regression_models.docx",
+    show=False, replace=True
+)
+```
+
+Pass fitted results in a list, with one heading per model. `keep` selects and orders displayed coefficients; with `exact_match=True`, use names from `.params.index` exactly, including interaction order and category labels. Omitting `Intercept` from `keep` hides it in the table, not in the fitted model. The output folder must exist; `replace=True` permits overwriting an existing export. Keep the `ETable` object to call `.save()` separately from `.make()`.
+
+### Complete cases and manual OLS — 10d
+
+```python
+X.notnull()                             # Boolean table: True for nonmissing entries.
+y.notnull()                             # Boolean Series for a nonmissing outcome.
+X.notnull().all(axis=1)                  # True where every predictor in a row is present.
+valid_rows = X.notnull().all(axis=1) & y.notnull()
+X = X[valid_rows]                        # Apply the same mask to predictors and outcome.
+y = y[valid_rows]
+
+n = X.shape[0]                          # Number of rows.
+W = np.c_[np.ones((n, 1)), X]            # Column-bind an intercept of ones and the predictors.
+W.T                                    # Transpose; no parentheses.
+W.T.dot(W)                              # Array method form of matrix dot product.
+beta = np.linalg.inv(W.T.dot(W)).dot(np.dot(W.T, y))
+predictions = X @ beta[1:] + beta[0]     # @ is matrix multiplication; preserve predictor order.
+```
+
+This is the lecture's manual OLS formula, `(W'W)^(-1)W'y`. It requires numeric data and an invertible `W'W` matrix; redundant predictors can make it fail. The `OrdinaryLeastSquares` class in the notebook is user-defined: create it with `(X, y)`, call `.fit()` to create `.beta`, `.coefficients`, and `.intercept`, then call `.predict(Xtest)`. Its `.fit()` returns `self`, allowing `OrdinaryLeastSquares(X, y).fit()` chaining. Those attributes do not exist before fitting.
+
+The helper is named `compute_ols(X, y)` and returns the coefficient array with the intercept first. The custom class stores its training inputs as `.Xtrain` and `.ytrain` during initialization. In Lecture 10a, `fn_positive_error(error)` is a lambda returning `error >= 0`; passing a numeric Series produces elementwise Booleans, while `.apply(fn_positive_error)` calls it on each value.
+
+## Lecture 11 — Dates, reshaping, plots, and panel models (11a–11e)
+
+### Parse and format dates — 11a
+
+```python
+pd.to_datetime(s)                       # Convert date strings to datetime values.
+pd.to_datetime(s, format="%B %d %Y")    # Parse a specified input format, e.g. October 15 2026.
+pd.read_csv("folder/file.csv", parse_dates=["date"])  # Parse a date column while reading.
+s.dt.strftime("%Y-%m")                 # Datetime Series → formatted strings.
+s.dt.strftime("This is the month of %B") # Mix date directives with literal text.
+```
+
+The `.dt` accessor requires datetime-like values. Parsing turns strings into dates; `strftime` turns dates into strings. Format directives are case-sensitive.
+
+| Directive | Meaning |
+| --- | --- |
+| `%Y`, `%y` | Four-digit year, two-digit year. |
+| `%m`, `%B` | Zero-padded month number, full month name. |
+| `%d`, `%A` | Zero-padded day of month, full weekday name. |
+| `%W` | Monday-based week number, 00–53; days before the first Monday are week 00. |
+| `%b`, `%a` | Abbreviated month and weekday names (e.g. Oct, Thu). |
+| `%H`, `%I` | Hour on a 24-hour clock (00–23) or 12-hour clock (01–12). |
+| `%M`, `%S` | Minute and second; `%M` is not the month directive. |
+
+The lecture's formatting figures also show abbreviated names and clock fields. Match punctuation literally: `format="%b-%d, %y"` parses `"Apr-04, 18"`, and `s.dt.strftime("%A, %B %d, %Y")` creates strings such as `"Thursday, October 15, 2026"`. A 12-hour clock needs AM/PM to distinguish morning and evening; `%p` is the AM/PM directive. The further-reading note mentions microseconds (`%f`) and time zones (`%z` for numeric UTC offset, `%Z` for a zone name); these are supplemental details, not worked lecture examples.
+
+### Group by time, calculate lags, and subset — 11a–11b
+
+```python
+pd.Grouper(key="date", freq="ME")      # Group a datetime column into month-end periods.
+df.groupby(pd.Grouper(key="date", freq="ME")).agg(
+    value_mean=("value", "mean")
+).reset_index()                         # Return grouped date index to a regular column.
+df.reset_index()                        # Move index levels into columns; create a default index.
+df.set_index("date")                   # Use a column as the index; assign result to retain it.
+s.diff()                                # Current value minus previous row; first is missing.
+s.shift(1)                              # Previous row's value aligned with the current row.
+growth = 100 * s.diff() / s.shift(1)     # Percent change; zero denominators need attention.
+elapsed = df["date"] - df["date"].shift(1)
+elapsed.dt.days                         # Whole days in each time difference.
+df["date"].dt.month                    # Calendar month number from datetime values.
+df["date"].dt.year                     # Calendar year from datetime values.
+s.between(lower, upper)                 # Boolean mask; both endpoints included by default.
+df.query('date.between("2020-03-01", "2020-05-01")')
+df.query('date <= "2019-01-01"')
+max(s)                                  # Built-in maximum, used on dates in the lecture.
+```
+
+Sort by date before drawing lines or computing differences/lags. `shift(1)` refers to the previous row, which may be several calendar days earlier. `elapsed.dt.days` belongs to timedelta data; it is not a calendar month/year extractor.
+
+Use `"ME"` for month-end, `"YE"` for year-end, `"W"` for weekly, and `"D"` for daily grouping in current pandas. Lecture 11a's `freq='y'` groups annually even though its variable and chart labels say monthly. Older pandas versions use `"M"`/`"Y"` for month/year ends; the reference uses the explicit modern aliases shown in the [pandas time-grouping documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.resample.html).
+
+### Reshape between wide and long — 11b
+
+```python
+long = pd.melt(
+    df, id_vars="date", value_vars=["sp500", "djia"],
+    var_name="portfolio_type", value_name="portfolio_value"
+)                                      # Separate portfolio columns → type/value rows.
+wide = pd.pivot(
+    long, index="date", columns="portfolio_type", values="portfolio_value"
+)                                      # Type/value rows → separate portfolio columns.
+```
+
+`id_vars` identifies columns to retain while stacking the selected value columns. `pivot` requires each index/column combination to be unique; it does not aggregate duplicates. Use `.reset_index()` afterward if the date should be a column again.
+
+### Lines, shading, and plot configuration — 10a and 11b–11d
+
+```python
+plt.plot(x, y, color="green")            # Line plot; connects points in supplied order.
+plt.plot("date", "value", data=df)      # Look up x/y columns by name.
+plt.fill_between(x=dates, y1=lower, y2=upper, where=mask, alpha=0.2, color="red")
+# Shade between lower/upper curves or constants where the mask selects intervals.
+
+ax.plot(x, y, linewidth=1, color="steelblue", label="Series")
+ax.scatter(x=x, y=y)                    # Scatter plot on one Axes; Lecture 11c exercise hint.
+ax.plot(df.set_index("date"))           # One line per numeric data column, using the index as x.
+ax.legend()                             # Use labels given to plotted series.
+ax.legend(["Series 1", "Series 2"])    # Explicit labels in plotted-series order.
+ax.set_xlabel("Date", fontsize=8, color="purple", labelpad=40)
+ax.set_ylabel("Growth", fontsize=20, color="pink", labelpad=5)
+ax.set_title("Title", fontsize=14)
+ax.tick_params(axis="both", labelsize=10)
+ax.xaxis.set_tick_params(labelsize=10, rotation=-90, colors="red")
+ax.yaxis.set_tick_params(labelsize=12, rotation=0, colors="blue")
+ax.grid(True)                           # Show grid; False hides it.
+ax.set_ylim(lower, upper)               # Set y-axis limits; reversed limits invert the axis.
+fig.tight_layout()                      # Figure method version of plt.tight_layout().
+```
+
+Lecture 11d's `PlotStyle` is a user-defined class that stores `color`, `tick_size`, `title_size`, and `grid=True`. Its `.plot(ax, x, y, title, label)` method applies those saved preferences using the methods above. Create separate instances for different styles; the class must be defined before use.
+
+### Date and numeric ticks — 11c
+
+```python
+mdates.MonthLocator(interval=12)         # Place a date tick every 12 months.
+mdates.DayLocator()                      # Daily ticks; mentioned as an alternative.
+mdates.YearLocator()                     # Annual ticks; mentioned as an alternative.
+mdates.DateFormatter("%y-%m-%d")        # Display datetime ticks with a date format.
+ticker.MaxNLocator(10)                   # Target at most 10 intervals; not exactly 10 ticks.
+ticker.FormatStrFormatter("%.1f")       # Display numeric ticks with one decimal place.
+# The lecture figure also shows "%.0f" (no decimals) and "%.2f" (two decimals).
+ax.xaxis.set_major_locator(locator)      # Configure tick positions; yaxis works too.
+ax.xaxis.set_major_formatter(formatter)  # Configure tick labels; yaxis works too.
+```
+
+Assign an appropriate locator/formatter object to each placeholder. Locators choose where ticks appear; formatters choose their text.
+
+### Panel models — optional 11e
+
+```python
+panel = wage_panel.load()               # Load the package's example panel dataset.
+wage_panel.DESCR                         # Dataset description; no parentheses.
+s.astype("category")                   # Convert to a categorical dtype.
+panel = panel.set_index(["nr", "year"]).sort_index()
+# Two-level index: entity first, time second. sort_index orders index labels.
+
+pooled = PooledOLS.from_formula("lwage ~ married + union", data=panel)
+pooled_results = pooled.fit(cov_type="clustered", cluster_entity=True)
+
+fixed = PanelOLS.from_formula(
+    "lwage ~ married + union + EntityEffects + TimeEffects", data=panel
+)
+fixed_results = fixed.fit(cov_type="clustered", cluster_entity=True)
+
+BetweenOLS.from_formula("lwage ~ exper + expersq + married + union", data=panel).fit()
+RandomEffects.from_formula("lwage ~ exper + expersq + married + union", data=panel).fit()
+FirstDifferenceOLS.from_formula("lwage ~ exper + expersq + married + union", data=panel).fit()
+fixed_results.params                    # Estimated coefficient Series.
+print(fixed_results.summary)            # Property here, unlike statsmodels' .summary().
+```
+
+Pooled OLS combines observations; between OLS uses entity averages; first differences use changes within entities. Random effects requires assumptions about the relationship between entity effects and regressors. `EntityEffects`/`TimeEffects` request fixed effects in `PanelOLS` formulas. Entity effects absorb time-invariant regressors. Entity-clustered covariance permits within-entity error dependence. Unlike statsmodels formulas, these linearmodels formulas need an explicit `1 +` if an intercept is wanted; first-difference models must not contain a constant.
+
+## Lecture 12 — Logistic classification and Poisson regression (12a–12b)
+
+### Build model matrices and estimate logistic regression — 12a
+
+```python
+y, X = patsy.dmatrices(
+    "request_loan ~ 1 + received_info + owns_house + home_numrooms",
+    df, return_type="dataframe"
+)
+y = np.ravel(y)                         # Flatten the response to a 1D array.
+
+logit_results = smf.logit("request_loan ~ received_info + owns_house + home_numrooms",
+                          data=df).fit(cov_type="HC1")
+matrix_results = sm.Logit(y, X).fit(cov_type="HC1")
+```
+
+Patsy returns outcome and design matrices, expanding formula terms and dropping rows with missing model inputs by default. The `1` requests an intercept column. The matrix interface uses the supplied columns as-is, so include the intercept in `X`. A binary logistic outcome is coded 0/1. Use the Lecture 10 table methods for fitted statsmodels results.
+
+```python
+classifier = LogisticRegression(
+    penalty=None, fit_intercept=False, solver="lbfgs",
+    max_iter=1000, tol=1e-10
+).fit(X, y)
+classifier.coef_                        # Fitted coefficient array; trailing underscore.
+classifier.coef_.ravel()                # Flatten coefficients for a binary model.
+pd.Series(classifier.coef_.ravel(), index=X.columns)  # Attach predictor names.
+```
+
+This preserves the lecture's unpenalized sklearn specification. `fit_intercept=False` avoids adding a second intercept because Patsy already supplied one. `max_iter` is the iteration limit; `tol` controls convergence tolerance. Newer sklearn versions deprecate `penalty`; their unpenalized alternative uses `C=np.inf` in place of `penalty=None`. See [LogisticRegression parameters](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html). Full-sample coefficient comparison and held-out prediction evaluation are separate tasks.
+
+### Split data, predict probabilities, and classify — 12a
+
+```python
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.5, random_state=42
+)
+# Fit the classifier on X_train, y_train before evaluating X_test.
+classifier.fit(X_train, y_train)
+probabilities = classifier.predict_proba(X_test)  # One column per class.
+classifier.classes_                             # Class labels in probability-column order.
+p1 = probabilities[:, 1]                        # P(class=1) when classes_ is [0, 1].
+predicted_labels = pd.cut(
+    p1, bins=[0, 0.2, 1], labels=[0, 1], right=True, include_lowest=True
+)
+```
+
+`test_size=0.5` reserves half the observations for testing; `random_state` makes the split reproducible. Train on the training sample and evaluate on the test sample. With the lecture's threshold rule, probabilities at or below 0.2 become class 0 and those above become class 1. `include_lowest=True` also classifies exactly zero, which the notebook's default `pd.cut` call would leave missing. Keep outcome values aligned with design-matrix rows.
+
+### Confusion matrix and annotations — 12a
+
+```python
+cm = confusion_matrix(y_test, predicted_labels, labels=[0, 1])
+# Rows = actual class; columns = predicted class: [[TN, FP], [FN, TP]].
+fig, ax = plt.subplots(figsize=(8, 8))
+ax.imshow(cm)
+ax.grid(False)
+ax.xaxis.set(ticks=(0, 1), ticklabels=("Predicted 0", "Predicted 1"))
+ax.yaxis.set(ticks=(0, 1), ticklabels=("Actual 0", "Actual 1"))
+ax.set_ylim(1.5, -0.5)
+for i in range(2):
+    for j in range(2):
+        ax.text(j, i, cm[i, j], ha="center", va="center")
+```
+
+`labels=[0, 1]` keeps a consistent 2×2 layout. `ax.text(x, y, text, ...)` places annotations at data coordinates; `ha` and `va` control horizontal and vertical alignment. Accuracy is `(TN + TP) / total`; changing the threshold changes the tradeoff between false positives and false negatives.
+
+### Poisson regression — optional 12b
+
+```python
+y, X = patsy.dmatrices("wage ~ age + tenure", df, return_type="dataframe")
+y = np.ravel(y)
+poisson_results = sm.GLM(y, X, family=sm.families.Poisson()).fit(cov_type="HC1")
+poisson_results.summary()
+mt.ETable([poisson_results]).make(type="gt")
+poisson_results.predict(X_test)         # Predicted means; test matrix must match training columns.
+```
+
+`sm.GLM` specifies a generalized linear model. `sm.families.Poisson()` uses a log link by default, giving conditional mean `exp(X @ beta)`. Poisson is commonly used for nonnegative counts; the lecture's wage example uses the exponential mean specification with robust covariance. Skewness alone does not establish that this is an appropriate model. Reuse train/test splitting for the prediction exercise and compare mean squared errors using `np.mean((actual - predicted) ** 2)`.
+
+## Imported-only helpers — uses and syntax
+
+These objects appear in lecture imports or supporting scripts but have no worked calls there. The examples below explain their purpose and are supplemental reference syntax, not additional lecture exercises. Import the relevant names before using them.
+
+### HTML display, time utilities, and browser waits — Lectures 5–6
+
+```python
+display(HTML("<b>Hello</b>"))             # Render an HTML string inside a notebook.
+import time as time_module              # Alias avoids collision with datetime.time.
+time_module.sleep(1)                    # Pause execution for one second.
+```
+
+`html5lib` is an HTML parser imported by the Lecture 6 script. It can be selected as `BeautifulSoup(html_text, "html5lib")` when installed; the worked lecture calls use `"html.parser"` instead.
+
+```python
+wait = WebDriverWait(driver, 10)         # Explicit wait, with a timeout in seconds.
+element = wait.until(EC.presence_of_element_located((By.XPATH, "//header")))
+```
+
+`By.XPATH` is a locator constant equivalent to the strategy string `"xpath"`. `EC` aliases the expected-conditions module; the example condition waits for presence in the document, not necessarily visibility. `WebDriverWait` performs explicit polling, not an implicit wait. `Command` contains low-level WebDriver command constants; it is not a browser-health function and the lecture does not use it. See [Selenium's expected-condition example](https://www.selenium.dev/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.expected_conditions.html?highlight=presence_of_all_elements_located).
+
+### Python date/time constructors — Lecture 11a
+
+```python
+from datetime import date, time, datetime
+date(2026, 10, 15)                      # Calendar date: year, month, day.
+time(14, 30, 0)                         # Time of day: hour, minute, second.
+datetime(2026, 10, 15, 14, 30, 0)       # Combined date/time; no timezone supplied here.
+```
+
+These create individual Python objects; `pd.to_datetime` handles the lecture's date columns. Calendar fields must form valid dates/times. `time(...)` here is a constructor, unlike the separate `time` module imported in Lecture 6.
+
+### Extra model and reporting imports — Lectures 11e and 12
+
+```python
+from linearmodels.datasets import mroz
+from linearmodels.iv import IV2SLS
+from sklearn.metrics import classification_report
+from statsmodels.iolib.summary2 import summary_col
+
+mroz.load()                             # Load the package's labor-supply example DataFrame.
+iv_model = IV2SLS(y, exog, endog, instruments)
+iv_results = iv_model.fit()             # Instrumental-variable two-stage least squares.
+# y: outcome; exog: exogenous regressors; endog: endogenous regressors;
+# instruments: excluded instruments. Include a constant in exog if wanted.
+
+classification_report(y_test, predicted_labels)  # Text report: precision, recall, F1, support.
+summary_col([results1, results2], model_names=["Model 1", "Model 2"],
+            float_format="%.3f", stars=True)    # Side-by-side statsmodels regression summary.
+```
+
+`classification_report` consumes class labels, not raw probabilities; print the returned string for readable output. `summary_col` is an alternative reporting helper; the worked Lecture 10–12 tables use `mt.ETable`. `IV2SLS` is imported but no IV model is estimated in Lecture 11e. Parameter details: [IV2SLS](https://bashtage.github.io/linearmodels/iv/iv/linearmodels.iv.model.IV2SLS.html), [summary_col](https://www.statsmodels.org/0.9.0/_modules/statsmodels/iolib/summary2.html).
+
+## Reading lecture syntax and correcting typos
+
+| If you see this in a lecture | Use / interpretation |
+| --- | --- |
+| `jmes.search(...)` in the Lecture 5b exercise | `jmespath.search(expression, obj)` matches the actual import. |
+| `.find_elments(...)` or `.findelements(...)` | `.find_elements("xpath", path)` returns a list. |
+| `.text()` on a Selenium element | `.text` is an attribute; omit parentheses. |
+| `plt.imgshow(...)` in a word-cloud comment | `plt.imshow(...)` is the actual image-display function. |
+| `fit(cov="HC1")` in Lecture 10a | `fit(cov_type="HC1")` requests the intended robust covariance. |
+| `dt.months` in a time-data comment | Use `.dt.month` on datetimes; `.dt.days` is for timedeltas. Calendar months have varying lengths. |
+| `ascending=TRUE` in a hint | Python spells the Boolean `True`, with only the first letter capitalized. |
+| `fn_cubic`, `bubble_sort`, or `fn_grade` | See the exact custom-function table: the current code's behavior does not always match the name or exercise request. |
+| `freq='y'` with a monthly chart label | The grouping is yearly; use the intended month/year frequency explicitly. |
+| `np.mean(...)` described as a median | Mean and median differ; use `np.median(...)` for the median. |
+| `class`, `role`, `id`, or `value` in HTML | These are attributes of elements, not HTML tag names or Python functions. |
+
+The receiver matters: `requests.get(url)` makes an HTTP request, `driver.get(url)` navigates a browser, and `mapping.get(key)` reads a dictionary. Likewise, `.fit()`, `.predict()`, `.plot()`, and `.summary` have object-specific meanings. Use the example for the object's library or custom class rather than assuming every method with the same name accepts the same inputs.
