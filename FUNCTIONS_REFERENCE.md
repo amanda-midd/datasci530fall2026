@@ -1,10 +1,12 @@
-# Function reference — Lectures 1–14
+# Function reference — Lectures 1–15
 
 Covers Lectures 1–12, audited October 15, 2026 against 47 local notebooks (including exercises and optional material), five supporting Python scripts, and the Lecture 5 introductory slides. Includes calls in code, examples in Markdown/comments, named exercise functions, and formatting shown in reference figures. Repeated library functions share entries; distinct receiver types and important options are described separately. This is a reference snapshot; pulling new lectures does not automatically update it. External reading links are not additional lecture content.
 
 **Reading the syntax:** `df` = DataFrame; `s` = one column (Series); `a` = array; other unquoted names are placeholders to replace with your variables. Quoted text is a string; replace placeholder column names and paths inside the quotes. Entries show the inputs and options taught, not every option available in the library. Code blocks are syntax templates, not a script to run top to bottom.
 
 Lectures 13a–13b and 14a–14b added October 27, 2026, including Markdown explanations, commented-out examples, current exercise code, and imported-only helpers. Earlier coverage was audited on the date above; the reference now covers 51 notebooks in total.
+
+Lecture 15 added October 27, 2026, including all code calls, scoring options, Markdown explanations, and the random-forest exercise. Total coverage is now 52 notebooks.
 
 Functions defined by the lectures must be defined or imported before use; see each lecture's custom-function entries. Imported-only helpers have a separate section with explicitly supplemental examples. Corrections to notebook typos are collected at the end.
 
@@ -16,6 +18,7 @@ Run installation commands in the terminal, in your course environment. `json`, `
 pip install numpy pandas matplotlib requests jmespath ipython beautifulsoup4 html5lib selenium webdriver-manager multiprocess wordcloud
 pip install statsmodels maketables linearmodels scikit-learn patsy
 pip install graphviz ISLP
+pip install ucimlrepo
 # Alternative installation syntax from the lectures:
 conda install package_name
 conda install conda-forge::html5lib
@@ -44,6 +47,10 @@ import maketables as mt                    # Regression tables and export.
 import patsy                               # Build response/design matrices from formulas.
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay, get_scorer_names
+from sklearn.svm import SVC
+from sklearn import preprocessing
+from ucimlrepo import fetch_ucirepo
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor as DTR
 from sklearn import tree
@@ -1399,6 +1406,166 @@ summarize(ols_results)                  # ISLP coefficient table from fitted sta
 ```
 
 `GridSearchCV` is the same search class documented in Lecture 13. `preprocessing` is a module for feature transformations, not a callable; no particular preprocessing function is named or used in the lecture. Any learned preprocessing must be fitted on training data only. `summarize` returns coefficient estimates, standard errors, test statistics, and p-values; see the [ISLP regression example](https://intro-stat-learning.github.io/ISLP/labs/Ch03-linreg-lab.html). Other repeated imports—`LogisticRegression`, `classification_report`, `confusion_matrix`, `train_test_split`, and `patsy`—are covered in Lectures 12 and the imported-only section below.
+
+## Lecture 15 — Scaling, SVM classification, metrics, and tuning
+
+### Retrieve UCI data and prepare inputs
+
+```python
+online_shopping = fetch_ucirepo(id=468)   # Fetch the named dataset by its numeric UCI ID; needs network access.
+X = online_shopping.data.features        # Feature DataFrame; attributes have no parentheses.
+X = X.drop(columns=["Month", "VisitorType"])
+y = online_shopping.data.targets["Revenue"]  # Select one outcome as a Series.
+dataset_names = pd.DataFrame(X.columns)  # Column names as a one-column table.
+table_y = pd.crosstab(y, "Purchased ?") / len(y)  # Outcome counts divided by total row count.
+display(table_y)
+display(X.describe())
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, random_state=104, test_size=0.25, shuffle=True
+)
+```
+
+`fetch_ucirepo` returns a dataset object; `.data.features` and `.data.targets` hold its predictors and outcomes. The lecture removes two string columns to leave features suitable for the numeric estimator. `test_size=0.25` reserves a quarter of the rows; `shuffle=True` randomizes the split and `random_state` makes it reproducible. The proportional crosstab excludes missing labels from its counts but divides by all rows, so it sums to one only when y has no missing values. Source: [UCI's Python package](https://github.com/uci-ml-repo/ucimlrepo/blob/main/README.md?plain=1).
+
+### Standardize features with the training scaler
+
+```python
+scaler = preprocessing.StandardScaler() # Create a transformer; default centers and scales each feature.
+scaler.fit(X_train)                     # Learn feature means/variances from training rows; returns self.
+X_train_scale = scaler.transform(X_train)
+X_test_scale = scaler.transform(X_test)  # Reuse exactly the same learned transformation.
+```
+
+`StandardScaler` applies `(x - training_mean) / training_standard_deviation` column by column and normally returns a NumPy array. Nonconstant training features have mean zero and unit variance after scaling; test features need not. Keep columns in the same order. `scaler.transform` applies learned values without fitting again; this is a different method from pandas `groupby(...).transform(...)` in Lecture 3.
+
+**Correction to the notebook:** do not fit `scaler_test` on `X_test`. That gives test rows a different coordinate system and uses information from the evaluation data. Fit on training rows only and transform both sets with that scaler. For cross-validation, learn the scaler inside each fold, as shown below. See [scikit-learn's preprocessing guidance](https://scikit-learn.org/stable/common_pitfalls) and [StandardScaler](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html?highlight=standardscaler).
+
+### Fit and score an SVM classifier
+
+```python
+svm = SVC()                             # Support-vector classifier; default RBF kernel and C=1.
+svm.fit(X_train_scale, y_train)          # Fit on scaled features and class labels; returns self.
+predictions = svm.predict(X_test_scale) # Predicted class labels, not probabilities.
+svm.classes_                           # Class labels in estimator order; trailing underscore.
+accuracy = svm.score(X_test_scale, y_test)  # Fraction correctly classified; higher is better.
+candidate = SVC(gamma=0.1, C=1)         # Separate unfitted model with explicit tuning parameters.
+```
+
+`C` must be positive: larger C penalizes training errors more strongly (weaker regularization). For the RBF kernel, a larger positive `gamma` makes each observation's influence more local. The default is `gamma="scale"`, calculated as `1 / (n_features * X.var())`; `gamma="auto"` uses `1 / n_features`. The notebook's default-gamma statement omits the variance factor. Scaling can make these values similar, but they are not universally identical. See [SVC parameters](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html).
+
+Always pass data in the representation used during fitting: an SVC fitted on `X_train_scale` must receive `X_test_scale` in `.predict()` and `.score()`. The notebook's later calls on raw `X_test` do not follow that rule. Unlike regression-tree `.score()` (R²), SVC `.score()` reports classification accuracy.
+
+### Confusion-matrix proportions and display
+
+```python
+cm = confusion_matrix(y_test, predictions, labels=svm.classes_) / len(y_test)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=svm.classes_)
+disp.plot()                             # Draw the display; returns the display object.
+plt.show()
+```
+
+Rows are actual labels and columns are predictions, both ordered by `svm.classes_`. Dividing the entire matrix by `len(y_test)` gives proportions of **all test observations**; it is not normalization separately within each actual class. The diagonal sum equals overall accuracy when every label is included. `ConfusionMatrixDisplay` accepts the precomputed matrix and matching labels; `.plot()` renders it.
+
+### Discover scorers and evaluate multiple metrics
+
+```python
+get_scorer_names()                       # List of valid named scorers available in installed sklearn.
+list_scorers = pd.DataFrame(get_scorer_names())
+```
+
+The lecture calls `cross_validate(SVC(), X_train_scale, y_train, scoring=["accuracy", "roc_auc", "recall_macro"], return_train_score=False, cv=5)`. This requests five-fold scores for three metrics. For a binary classifier with integer `cv`, sklearn uses stratified folds, without shuffling by default. Each class needs enough observations for the chosen number of folds.
+
+| Scorer | Meaning and required prediction type |
+| --- | --- |
+| `"accuracy"` | Fraction of predicted class labels that are correct. |
+| `"roc_auc"` | Binary ranking performance across thresholds; uses decision scores or probabilities, not hard labels. SVC provides decision scores, so probability estimation is not required for this scorer. |
+| `"recall_macro"` | Recall computed for each class, then averaged with equal class weights, regardless of class sizes. |
+
+All three are higher-is-better. With multiple named metrics, result keys are `"test_accuracy"`, `"test_roc_auc"`, and `"test_recall_macro"` rather than just `"test_score"`. `return_train_score=False` omits training-fold scores. `pd.DataFrame(res)` shows one row per fold; `.mean()` averages numeric columns, including `fit_time` and `score_time`, which are seconds, not performance measures.
+
+**Supplemental correction for scaling within CV:** a pipeline ensures each fold learns its own scaler using only that fold's training rows. `Pipeline` is added here to make the lecture workflow correct; it is not a lecture import.
+
+```python
+from sklearn.pipeline import Pipeline
+svm_pipeline = Pipeline([
+    ("scale", preprocessing.StandardScaler()),
+    ("svm", SVC())
+])
+res = cross_validate(
+    svm_pipeline, X_train, y_train,
+    scoring=["accuracy", "roc_auc", "recall_macro"],
+    return_train_score=False, cv=5
+)
+display(pd.DataFrame(res))
+pd.DataFrame(res).mean()
+```
+
+Pass raw features to this pipeline; it scales them internally. Scaling the entire training dataset before splitting into CV folds lets held-out folds influence preprocessing. `cross_val_score`, also imported but not called in Lecture 15, returns a single scorer's array rather than this multi-metric result dictionary; see Lecture 14.
+
+### Manual tuning, dictionaries, and string formatting
+
+```python
+k_features = X.shape[1]                 # Number of predictor columns.
+best_score = -np.inf                    # Supplemental safeguard: allow the first candidate to win.
+for gamma in [0.1 / k_features, 1 / k_features]:
+    for C in [0.1, 1]:
+        candidate = SVC(gamma=gamma, C=C)
+        candidate.fit(X_train_scale, y_train)
+        score = candidate.score(X_valid_scale, y_valid)
+        if score > best_score:
+            best_score = score
+            best_parameters = {"C": C, "gamma": gamma}
+svm = SVC(**best_parameters)            # Unpack dictionary keys into keyword arguments.
+svm.fit(X_train_scale, y_train)
+print("Parameter grid:\n{}".format(best_parameters))
+```
+
+`X_valid_scale` is a validation set transformed by the training scaler, with aligned labels `y_valid`; these are placeholders for a separate tuning split. Nested loops try every C/gamma pair. `**best_parameters` is equivalent to writing `C=..., gamma=...` explicitly, not exponentiation in this call context. String `.format(value)` substitutes into `{}`; `\n` inserts a newline. This string method is distinct from pandas Styler `.format(...)`.
+
+The notebook initializes `best_score=0`; if every score is zero, its strict `>` test never defines `best_parameters`. It also tunes repeatedly on the named test set, which then acts as validation data and is no longer an untouched final test. Its heading says “all data,” but `.fit(X_train_scale, y_train)` fits only that training subset. Prefer CV on the training set for parameter selection and reserve test data for final evaluation.
+
+### Grid search options and the forest exercise
+
+```python
+param_grid = {
+    "C": [0.01, 0.1],
+    "gamma": [0.01 / k_features, 0.1 / k_features]
+}
+grid_search = GridSearchCV(
+    SVC(), param_grid, cv=2, return_train_score=True, n_jobs=-1
+)
+# Constructor matches the lecture. Use a pipeline below to include scaling within folds.
+```
+
+The grid defines four parameter combinations, with exact SVC parameter names as keys. `cv=2` uses two stratified folds for this classifier; increasing it uses a larger training fraction per fit but requires more fits. `return_train_score=True` includes training scores in `cv_results_`; `n_jobs=-1` requests all available processors. Without explicit `scoring`, the search maximizes SVC's accuracy. Default `refit=True` fits the best setting on all rows supplied to the search's `.fit()`.
+
+```python
+pipeline_grid = {
+    "svm__C": param_grid["C"],
+    "svm__gamma": param_grid["gamma"]
+}
+grid_search = GridSearchCV(
+    svm_pipeline, pipeline_grid, cv=2, return_train_score=True, n_jobs=-1
+)
+grid_search.fit(X_train, y_train)
+grid_search.best_params_                # Selected parameter dictionary; supplemental inspection.
+grid_search.best_estimator_             # Refitted pipeline, including the scaler.
+pd.DataFrame(grid_search.cv_results_)   # Per-candidate scores, timings, parameters, and ranks.
+predictions = grid_search.predict(X_test)  # Raw test features; pipeline applies its fitted scaler.
+```
+
+Pipeline parameters use `step_name__parameter`, with **two underscores**; here the classifier step was named `"svm"`. The final exercise asks for a **random forest classifier** grid, not the regression estimator `RF` from Lecture 13. The required import and syntax are:
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+forest_search = GridSearchCV(
+    RandomForestClassifier(random_state=0),
+    {"n_estimators": [10, 50]}, cv=2, return_train_score=True, n_jobs=-1
+)
+forest_search.fit(X_train, y_train)
+```
+
+`n_estimators` counts trees in each forest, not the number of forests. Classification uses class labels; the fitted classifier supports `.predict(X_test)`, `.score(X_test, y_test)` for accuracy, and `.classes_`. This example supplies syntax for the exercise; the notebook's exercise cell is blank.
 
 ## Imported-only helpers — uses and syntax
 
