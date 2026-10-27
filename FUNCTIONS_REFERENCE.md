@@ -1,8 +1,10 @@
-# Function reference — Lectures 1–12
+# Function reference — Lectures 1–14
 
 Covers Lectures 1–12, audited October 15, 2026 against 47 local notebooks (including exercises and optional material), five supporting Python scripts, and the Lecture 5 introductory slides. Includes calls in code, examples in Markdown/comments, named exercise functions, and formatting shown in reference figures. Repeated library functions share entries; distinct receiver types and important options are described separately. This is a reference snapshot; pulling new lectures does not automatically update it. External reading links are not additional lecture content.
 
 **Reading the syntax:** `df` = DataFrame; `s` = one column (Series); `a` = array; other unquoted names are placeholders to replace with your variables. Quoted text is a string; replace placeholder column names and paths inside the quotes. Entries show the inputs and options taught, not every option available in the library. Code blocks are syntax templates, not a script to run top to bottom.
+
+Lectures 13a–13b and 14a–14b added October 27, 2026, including Markdown explanations, commented-out examples, current exercise code, and imported-only helpers. Earlier coverage was audited on the date above; the reference now covers 51 notebooks in total.
 
 Functions defined by the lectures must be defined or imported before use; see each lecture's custom-function entries. Imported-only helpers have a separate section with explicitly supplemental examples. Corrections to notebook typos are collected at the end.
 
@@ -13,6 +15,7 @@ Run installation commands in the terminal, in your course environment. `json`, `
 ```sh
 pip install numpy pandas matplotlib requests jmespath ipython beautifulsoup4 html5lib selenium webdriver-manager multiprocess wordcloud
 pip install statsmodels maketables linearmodels scikit-learn patsy
+pip install graphviz ISLP
 # Alternative installation syntax from the lectures:
 conda install package_name
 conda install conda-forge::html5lib
@@ -22,6 +25,7 @@ conda install conda-forge::multiprocess
 conda install wordcloud
 conda install statsmodels
 conda install -c conda-forge linearmodels
+conda install python-graphviz
 ```
 
 ```python
@@ -41,6 +45,16 @@ import patsy                               # Build response/design matrices from
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor as DTR
+from sklearn import tree
+from sklearn.ensemble import RandomForestRegressor as RF
+from sklearn.ensemble import GradientBoostingRegressor as GBR
+import sklearn.model_selection as skm
+from sklearn.model_selection import cross_validate, KFold, ShuffleSplit
+import graphviz
+import ISLP
+from ISLP import load_data
+from ISLP.models import sklearn_sm, summarize
 from matplotlib import ticker
 import matplotlib.dates as mdates
 from linearmodels.datasets import wage_panel
@@ -1195,6 +1209,196 @@ poisson_results.predict(X_test)         # Predicted means; test matrix must matc
 ```
 
 `sm.GLM` specifies a generalized linear model. `sm.families.Poisson()` uses a log link by default, giving conditional mean `exp(X @ beta)`. Poisson is commonly used for nonnegative counts; the lecture's wage example uses the exponential mean specification with robust covariance. Skewness alone does not establish that this is an appropriate model. Reuse train/test splitting for the prediction exercise and compare mean squared errors using `np.mean((actual - predicted) ** 2)`.
+
+## Lecture 13 — Regression trees, pruning, forests, and boosting (13a–13b)
+
+### Dataset loading and input shapes
+
+```python
+ISLP.load_data("Boston")                 # Load the named ISLP dataset as a DataFrame.
+load_data("Smarket")                    # Same function after `from ISLP import load_data` (14b).
+X_train = training_df.drop(columns=["outcome"])
+X_test = testing_df.drop(columns=["outcome"])
+y_train = training_df["outcome"]         # Single brackets give a 1D Series.
+y_test = testing_df["outcome"]
+X_train.shape[1]                         # Number of predictor columns; shape[0] counts rows.
+```
+
+The lecture's `df[["shares"]]` creates a two-dimensional one-column DataFrame. For a single outcome, use `df["shares"]` or `np.ravel(y)` to get a 1D target. Training/test predictors must have the same columns in the same order; exclude the outcome from the predictors. The Boston exercise uses `crim` as its outcome.
+
+### Train, predict, and evaluate a regression tree — 13a
+
+```python
+tree_model = DTR(max_depth=3, random_state=0)
+tree_model.fit(X_train, y_train)          # Learn splits and leaf predictions; returns this estimator.
+y_pred = tree_model.predict(X_test)      # Numeric predictions, one per test row for a single outcome.
+mse = np.mean((np.ravel(y_test) - np.ravel(y_pred)) ** 2)
+```
+
+`DTR` aliases `DecisionTreeRegressor`. `max_depth` limits tree depth, not the total number of branches or leaves. `random_state` makes randomized aspects of fitting, including tie-breaking, reproducible. The default regression criterion is squared error. Fit before prediction; lower held-out MSE is better.
+
+**Shape correction:** subtracting an `(n, 1)` target array from `(n,)` predictions broadcasts to an `(n, n)` array. That averages errors between different observations and can silently give the wrong MSE. Flatten both single-outcome arrays and ensure they have equal lengths and matching row order before subtracting.
+
+### Visualize the fitted tree — 13a
+
+```python
+dot_text = tree.export_graphviz(
+    decision_tree=tree_model,
+    feature_names=X_train.columns.values,
+    filled=True
+)
+graphviz.Source(dot_text)                # Wrap DOT source for notebook rendering.
+```
+
+`export_graphviz` returns a DOT-format string when no output file is specified. `feature_names` supplies one label per predictor in training-column order. `filled=True` colors nodes; the pruned-tree example omits it. `graphviz.Source` is a constructor, not a tree estimator. Notebook rendering also needs the Graphviz executable `dot` available on PATH; installing the Python package alone may not provide it. The lecture suggests `conda install python-graphviz` if needed. See the [Graphviz installation guide](https://graphviz.readthedocs.io/en/stable/manual.html).
+
+### Cost-complexity pruning and grid search — 13a
+
+```python
+ccp_path = tree_model.cost_complexity_pruning_path(X_train, y_train)
+ccp_path.ccp_alphas                      # Candidate nonnegative pruning strengths; attribute.
+kfold = skm.KFold(5, shuffle=True, random_state=10)
+grid = skm.GridSearchCV(
+    tree_model,
+    {"ccp_alpha": ccp_path.ccp_alphas},
+    refit=True,
+    cv=kfold,
+    scoring="neg_mean_squared_error"
+)
+G = grid.fit(X_train, y_train)            # Fit candidates across folds; returns the search object.
+pruned_tree = grid.best_estimator_       # Best model refitted on all data supplied to grid.fit.
+pruned_predictions = pruned_tree.predict(X_test)
+```
+
+`cost_complexity_pruning_path` computes candidate subtrees for the estimator's settings; it does not modify the fitted tree into the selected pruned model. Larger `ccp_alpha` generally means more pruning. The parameter grid is a dictionary with exact estimator parameter names as string keys and collections of candidate values. `cv` supplies the fold scheme; `refit=True` fits the winner on the full search-training data. `best_estimator_` is available after fitting, with a trailing underscore and no parentheses.
+
+`GridSearchCV` chooses the highest score. Negative MSE therefore makes a smaller error score better: −10 beats −100. `skm.GridSearchCV` and a directly imported `GridSearchCV` are the same class. See [decision-tree pruning](https://scikit-learn.org/1.7/modules/generated/sklearn.tree.DecisionTreeRegressor.html). Keep the final test data out of pruning selection.
+
+### Bagging and random forests — 13b
+
+```python
+bagged_model = RF(max_features=X_train.shape[1], random_state=0)
+bagged_model.fit(X_train, np.ravel(y_train))
+
+rf_model = RF(random_state=0)             # The notebook's second specification.
+rf_model.fit(X_train, np.ravel(y_train))
+rf_predictions = rf_model.predict(X_test)
+```
+
+`RF` aliases `RandomForestRegressor`; predictions average the fitted trees. With its default `bootstrap=True`, each tree fits a sample drawn with replacement. `max_features` controls candidate features **at each split**, not a permanent set of discarded columns. An integer specifies a count; a fraction such as `0.5` selects roughly half the features; `"sqrt"` selects about the square root of the feature count.
+
+**Default clarification:** current `RF()` uses `max_features=1.0`, meaning all features. Thus the two notebook specifications both use all predictors at each split; the second does not automatically introduce feature subsampling. For an explicit feature-subsampling comparison, use a setting such as `RF(max_features="sqrt", random_state=0)`. See [RandomForestRegressor parameters](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html?highlight=randomforest).
+
+### Gradient boosting — 13b
+
+```python
+boost_model = GBR(
+    n_estimators=5000, learning_rate=0.2, max_depth=3, random_state=0
+)
+boost_model.fit(X_train, np.ravel(y_train))
+y_hat_boost = boost_model.predict(X_test)
+boost_mse = np.mean((np.ravel(y_test) - np.ravel(y_hat_boost)) ** 2)
+```
+
+`GBR` aliases `GradientBoostingRegressor`. `n_estimators` is the number of boosting stages, `learning_rate` scales each added tree's contribution, and `max_depth` limits each individual tree. Boosting adds trees sequentially to improve the current predictions, unlike averaging independently fitted bootstrap trees. Tune learning rate and stage count together. The notebook uses 5,000 stages; that can take time. The trailing semicolon after `.predict(...)` in the notebook is optional Python syntax, not part of the method.
+
+## Lecture 14 — Cross-validation and expanding windows (14a–14b)
+
+### K-fold splitting and cross-validation — 14a
+
+```python
+cv = KFold(n_splits=5, shuffle=True, random_state=0)
+cv_results = cross_validate(tree_model, X_estimate, np.ravel(y_estimate), cv=cv)
+np.mean(cv_results["test_score"])        # Average held-out R² for a standard regression tree.
+```
+
+`KFold` splits observations into `n_splits` folds; each is held out once while the other folds train the model. The split count must be at least 2 and no greater than the number of observations. `shuffle=True` randomizes row allocation before splitting; `random_state` fixes that shuffle. `skm.KFold(5, ...)` uses the same class, with a positional split count.
+
+`cross_validate` clones and fits the estimator separately in each fold, so it does not require the preliminary `.fit()` shown in the notebook. It returns a dictionary of arrays, including `"test_score"`, `"fit_time"`, and `"score_time"`. Here “test” means the held-out fold within the supplied data, not the separate external dataset. This call does not refit the supplied estimator on the full dataset.
+
+**Choose the metric explicitly when comparing errors:** without `scoring`, `cross_validate` uses the estimator's `.score()`; for `DTR` that is R², not MSE. For MSE:
+
+```python
+cv_results = cross_validate(
+    tree_model, X_estimate, np.ravel(y_estimate), cv=cv,
+    scoring="neg_mean_squared_error"
+)
+cv_mse = -np.mean(cv_results["test_score"])  # Negate once to obtain positive MSE.
+```
+
+R² is higher-is-better and can be negative; MSE is lower-is-better. Use training folds to compare settings, refit the selected model on the estimation data, then evaluate on the untouched validation/test data. See [cross_validate](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_validate.html).
+
+### Commented-out leave-one-out example and statsmodels adapter — 14a
+
+```python
+M = sklearn_sm(sm.OLS)                   # Adapt a statsmodels model class to sklearn's interface.
+X = sm.add_constant(np.array(X_estimate)) # Add an intercept column; default prepends it.
+Y = np.ravel(y_estimate)
+cv_results = cross_validate(
+    M, X, Y, cv=X_estimate.shape[0], scoring="neg_mean_squared_error"
+)
+loo_mse = -np.mean(cv_results["test_score"])
+
+ols_results = sm.OLS(Y, X).fit()          # Direct matrix-interface OLS; outcome comes first.
+```
+
+`sm.OLS` is a model class, passed **without parentheses** to `sklearn_sm`; the adapter provides fitting and prediction for cross-validation. `sm.add_constant` supplies the intercept that matrix-based `sm.OLS` does not add automatically. By default it skips adding another column if it detects an existing nonzero constant column. `cv=n` gives leave-one-out folds for this regression example and fits n models; it can be slow.
+
+The notebook's commented variable `X_estiamte` is a typo for `X_estimate`. Its `sklearn_sm` example omits `scoring`; the installed ISLP adapter uses positive MSE for OLS, unlike a sklearn tree's default R². Adapter behavior can vary by version, so the explicit negative-MSE scorer above fixes the meaning. Flatten Y to avoid the same broadcasting issue as Lecture 13. R² is not defined for a one-observation held-out fold. The adapter comes from [ISLP's sklearn wrappers](https://intro-stat-learning.github.io/ISLP/api/generated/ISLP.models.sklearn_wrap.html).
+
+### Time ordering, row numbers, and expanding windows — 14b
+
+```python
+Smarket = load_data("Smarket")
+Smarket.plot(y="Volume")                # Plot the selected column against the DataFrame index.
+Smarket["obs_num"] = np.arange(1, len(Smarket) + 1)
+split = len(Smarket) // 2                # Integer floor division: initial half-sample size.
+training = Smarket.query("obs_num <= @split")
+testing = Smarket.query("obs_num > @split")
+```
+
+`np.arange(start, stop, step)` returns evenly spaced values with stop excluded; step defaults to 1, so `np.arange(1, n + 1)` gives row numbers 1 through n. The row-number column is an identifier, not automatically a predictor. The lecture assumes the data are already in chronological order.
+
+For the exercise, choose a numeric outcome and predictors available at prediction time; define `features` explicitly. `DTR` must be imported in this notebook, and `.fit()` needs both X and y. The current exercise cell has a bare `features` expression and empty `.fit()` calls, so it is an unfinished template. Supplemental syntax for one-step-ahead evaluation:
+
+```python
+X = ordered_df[feature_names]
+y = ordered_df[outcome_name]             # One numeric outcome; exclude it from feature_names.
+start = len(ordered_df) // 2
+errors = []
+for stop in range(start, min(start + 12, len(ordered_df))):
+    model = DTR(max_depth=3, random_state=0)
+    model.fit(X.iloc[:stop], y.iloc[:stop])
+    prediction = model.predict(X.iloc[stop:stop + 1])
+    errors.append((y.iloc[stop] - prediction[0]) ** 2)
+expanding_mse = np.mean(errors)
+```
+
+The initial window needs at least one training row and one later test row. This example implements the first fit, the half-plus-one fit, and up to ten further fits, using only earlier observations to predict the next one. The lecture leaves the evaluation horizon open; choose it consistently if predicting several future rows instead. Do not randomly shuffle time-series rows or use future outcomes in predictors. String labels such as `Direction` need a classification workflow rather than regression MSE.
+
+### Imported-only helpers — 14a–14b
+
+These imports have no worked calls in the notebooks. The syntax below is supplemental, so their presence in an import block is not mistaken for a completed example.
+
+```python
+from sklearn.model_selection import cross_val_score, GridSearchCV
+from sklearn.svm import SVC
+from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn import preprocessing
+
+ShuffleSplit(n_splits=5, test_size=0.2, random_state=0)
+# Repeated random train/test splits; test sets can overlap between repetitions.
+scores = cross_val_score(model, X, y, cv=cv, scoring="neg_mean_squared_error")
+# Return just the score array; cross_validate also returns timings.
+svm = SVC()                             # Support-vector classifier, not a regression tree.
+svm.fit(X_train, y_train)                # Use categorical class labels as the target here.
+labels = svm.predict(X_test)
+ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=[0, 1]).plot()
+# Display a precomputed confusion matrix; label order must match its rows/columns.
+summarize(ols_results)                  # ISLP coefficient table from fitted statsmodels results.
+```
+
+`GridSearchCV` is the same search class documented in Lecture 13. `preprocessing` is a module for feature transformations, not a callable; no particular preprocessing function is named or used in the lecture. Any learned preprocessing must be fitted on training data only. `summarize` returns coefficient estimates, standard errors, test statistics, and p-values; see the [ISLP regression example](https://intro-stat-learning.github.io/ISLP/labs/Ch03-linreg-lab.html). Other repeated imports—`LogisticRegression`, `classification_report`, `confusion_matrix`, `train_test_split`, and `patsy`—are covered in Lectures 12 and the imported-only section below.
 
 ## Imported-only helpers — uses and syntax
 
