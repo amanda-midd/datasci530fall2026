@@ -1,4 +1,4 @@
-# Function reference — Lectures 1–15
+# Function reference — Lectures 1–17
 
 Covers Lectures 1–12, audited October 15, 2026 against 47 local notebooks (including exercises and optional material), five supporting Python scripts, and the Lecture 5 introductory slides. Includes calls in code, examples in Markdown/comments, named exercise functions, and formatting shown in reference figures. Repeated library functions share entries; distinct receiver types and important options are described separately. This is a reference snapshot; pulling new lectures does not automatically update it. External reading links are not additional lecture content.
 
@@ -7,6 +7,8 @@ Covers Lectures 1–12, audited October 15, 2026 against 47 local notebooks (inc
 Lectures 13a–13b and 14a–14b added October 27, 2026, including Markdown explanations, commented-out examples, current exercise code, and imported-only helpers. Earlier coverage was audited on the date above; the reference now covers 51 notebooks in total.
 
 Lecture 15 added October 27, 2026, including all code calls, scoring options, Markdown explanations, and the random-forest exercise. Total coverage is now 52 notebooks.
+
+Lectures 16–17 added November 3, 2026, covering neural networks, optimization, PCA, clustering, plotting options, and exercises: 54 notebooks total. Numbering here follows folders: `Lecture 16/Lecture 16 - Neural Networks.ipynb` has an internal Lecture 17 heading; `Lecture 17/Lecture 18 - PCA and K-means clustering.ipynb` has a Lecture 17 heading. Their original filenames/headings are preserved.
 
 Functions defined by the lectures must be defined or imported before use; see each lecture's custom-function entries. Imported-only helpers have a separate section with explicitly supplemental examples. Corrections to notebook typos are collected at the end.
 
@@ -19,6 +21,8 @@ pip install numpy pandas matplotlib requests jmespath ipython beautifulsoup4 htm
 pip install statsmodels maketables linearmodels scikit-learn patsy
 pip install graphviz ISLP
 pip install ucimlrepo
+# Lectures 16–17 (use the environment selected by your notebook kernel):
+pip install tensorflow seaborn faiss-cpu
 # Alternative installation syntax from the lectures:
 conda install package_name
 conda install conda-forge::html5lib
@@ -29,6 +33,8 @@ conda install wordcloud
 conda install statsmodels
 conda install -c conda-forge linearmodels
 conda install python-graphviz
+conda install tensorflow
+conda install -c conda-forge faiss-cpu
 ```
 
 ```python
@@ -1566,6 +1572,234 @@ forest_search.fit(X_train, y_train)
 ```
 
 `n_estimators` counts trees in each forest, not the number of forests. Classification uses class labels; the fitted classifier supports `.predict(X_test)`, `.score(X_test, y_test)` for accuracy, and `.classes_`. This example supplies syntax for the exercise; the notebook's exercise cell is blank.
+
+## Lecture 16 — Neural networks and TensorFlow
+
+### Imports, environment, and numeric inputs
+
+```python
+import tensorflow as tf
+from tensorflow import keras
+from keras.layers import Dense           # Exact lecture import.
+# Consistent alternative: from tensorflow.keras.layers import Dense
+X = np.asarray(X).astype(np.float32)
+y = np.asarray(y).astype(np.float32)
+```
+
+Use the notebook's **Python (Computing 530 — TensorFlow)** kernel, backed by `.venv-tensorflow`. Installing a package into another Python environment does not make it available to that kernel. Lecture 17 also records `/opt/anaconda3/bin/python -m pip install faiss-cpu`, which targets Anaconda specifically. Installation commands belong in a terminal, not a plain `.py` statement.
+
+`np.asarray` converts the feature table/target Series to arrays; `.astype(np.float32)` converts values to 32-bit floating point. This removes pandas column labels, so retain feature names separately if needed. Boolean targets become 0.0/1.0. Shapes are `(n, k_features)` for X and `(n,)` for y; `X.shape[1]` obtains the number of features and `print(k_features)` displays it.
+
+The lecture repeats `fetch_ucirepo(id=468)`, `.data.features`, `.data.targets["Revenue"]`, `.drop(columns=["Month", "VisitorType"])`, and `train_test_split(..., random_state=104, test_size=0.25, shuffle=True)` from Lecture 15. Its imported `SVC`, `cross_val_score`, `GridSearchCV`, `cross_validate`, and `get_scorer_names` have no calls here; see Lectures 14–15 for their syntax and purpose.
+
+### Configure, compile, and train
+
+The following follows the lecture architecture with two corrections: set the seed before constructing layers, and use one training-fitted scaler throughout.
+
+```python
+tf.keras.utils.set_random_seed(0)
+scaler_train = preprocessing.StandardScaler().fit(X_train)
+X_train_scale = scaler_train.transform(X_train)
+X_test_scale = scaler_train.transform(X_test)
+k_features = X_train.shape[1]
+
+basic_model = keras.models.Sequential()
+basic_model.add(Dense(units=16, activation="relu", input_shape=(k_features,)))
+basic_model.add(Dense(units=1, activation="sigmoid"))
+adam = keras.optimizers.Adam(learning_rate=0.001)
+basic_model.compile(loss="binary_crossentropy", optimizer=adam, metrics=["accuracy"])
+history = basic_model.fit(X_train_scale, y_train, epochs=100)
+```
+
+| Call / option | Use and syntax details |
+| --- | --- |
+| `keras.models.Sequential()` | Model whose layers run in sequence. `.add(layer)` appends a layer to that model. |
+| `Dense(units=16, activation="relu", input_shape=(k_features,))` | Fully connected layer with 16 neurons. Each neuron applies an activation to a weighted sum plus bias. The input shape excludes the batch dimension; the comma makes a one-element tuple. |
+| `activation="relu"` | Rectified linear unit: `max(0, z)`, giving a nonlinear hidden layer. |
+| `Dense(units=1, activation="sigmoid")` | One output probability for binary classification: sigmoid is `1 / (1 + exp(-z))`. Two classes do **not** require two output neurons with this setup. |
+| `keras.optimizers.Adam(learning_rate=0.001)` | Optimizer that adjusts weights using gradients and adaptive updates. Learning rate controls step size. |
+| `.compile(loss=..., optimizer=..., metrics=[...])` | Configures training. Binary cross-entropy is the loss being minimized; accuracy is a separate reported metric. Compilation does not train weights. |
+| `.fit(X, y, epochs=100)` | Trains for 100 passes through the training data; returns a History object, unlike sklearn `.fit()` returning the estimator. Batch size controls observations per update; the lecture omits `batch_size` (array-input default is 32). |
+| `tf.keras.utils.set_random_seed(0)` | Sets Python, NumPy, and TensorFlow seeds. Place before model construction so random initial weights are covered; some operations/hardware can still be nondeterministic. |
+
+In newer Keras, the explicit-input alternative is `basic_model.add(keras.Input(shape=(k_features,)))` followed by `basic_model.add(Dense(16, activation="relu"))`; this avoids the warning about passing `input_shape` to Dense. This is supplemental syntax. The lecture's first Dense layer is a **hidden layer receiving the input**, followed by an output layer; the feature input itself is not a learned Dense layer.
+
+**Notebook corrections:** it fits a separate test scaler and even repeats `.fit(X_test).transform(X_test)`. Use the training scaler for test data. Its actual model `.fit(X_train, ...)` and `.predict(X_test)` use raw features, so its scaling cells have no effect on that fitted model. The example above deliberately uses scaled features for both. Its seed is set after layer construction; move it earlier for reproducible initialization.
+
+Sources: [Dense](https://keras.io/api/layers/core_layers/dense/), [training APIs](https://keras.io/api/models/model_training_apis/), and [random seed utility](https://www.tensorflow.org/api_docs/python/tf/keras/utils/set_random_seed).
+
+### Probabilities, thresholds, and confusion matrices
+
+```python
+predicted_prob = basic_model.predict(X_test_scale)  # Shape (n_test, 1).
+predicted_prob = tf.squeeze(predicted_prob, axis=-1)
+threshold = 0.5
+predicted = np.array([1 if x >= threshold else 0 for x in predicted_prob])
+cm = confusion_matrix(y_test, predicted)
+displ = ConfusionMatrixDisplay(confusion_matrix=cm)
+displ.plot()
+plt.show()
+```
+
+Keras `.predict()` here returns probabilities, whereas SVC `.predict()` returns labels. The list comprehension applies the threshold element by element and `np.array` collects the integer labels. `tf.squeeze` removes dimensions of length one; the lecture uses `tf.squeeze(predicted_prob)` with no axis, which removes **all** such dimensions. The explicit `axis=-1` above preserves the observation dimension even for a single prediction. See [TensorFlow squeeze](https://www.tensorflow.org/api_docs/python/tf/squeeze).
+
+This confusion matrix contains **counts**, unlike Lecture 15's matrix divided by sample size. Rows are true labels and columns predicted labels. For labels `[0, 1]`, entries are `[[TN, FP], [FN, TP]]`. Accuracy is `(TP + TN) / n`; false-positive rate is `FP / (FP + TN)` when the denominator is nonzero. Lowering the threshold usually increases both true-positive and false-positive rates; choose a threshold with validation data, then assess on untouched test data.
+
+### Concepts and exercises
+
+Logistic regression applies sigmoid to one linear predictor. A neural network adds hidden transformations, learning weights and biases from examples. More neurons/layers increase flexibility but do not guarantee better test accuracy. Universal approximation means sufficiently expressive networks can approximate continuous functions on a compact domain; it does not guarantee training will find those weights or generalize.
+
+Training repeats **forward propagation → loss calculation → backpropagation → optimizer update** for batches across epochs. Architecture, activation, learning rate, batch size, and epochs are hyperparameters chosen before a training run; weights and biases are fitted parameters. Loss guides optimization, while evaluation metrics answer how well the model performs on the task.
+
+| Task / metric mentioned in the notes | Meaning / when to use |
+| --- | --- |
+| Regression: MAE, MSE, RMSE, R² | Absolute error; squared error; square root of MSE in outcome units; improvement relative to predicting the mean. |
+| Precision, recall, F1 | `TP/(TP+FP)`; `TP/(TP+FN)`; harmonic mean of precision and recall (when defined). Useful when mistakes or classes have unequal importance. |
+| ROC-AUC, log loss | Ranking across thresholds; quality of predicted probabilities with confident wrong predictions penalized heavily. |
+| PR-AUC | Area under a precision–recall curve; useful for rare positive outcomes. Accuracy alone can hide failure on a minority class. |
+
+These metrics are named concepts here; no corresponding metric functions are called in this notebook beyond the confusion-matrix display and compiled accuracy.
+
+The exercises ask you to increase units, add hidden layers, and use `ArticlesTrain.csv`/`ArticlesTest.csv`. To add a hidden layer, place another `basic_model.add(Dense(units=16, activation="relu"))` **before** the output layer, then compile and train a fresh model. Compare architectures on validation data. For article shares as a continuous outcome, a supplemental suitable output is `Dense(units=1, activation="linear")` with a regression loss such as `loss="mse"`; use binary cross-entropy only if a binary target has actually been defined. Load the files with the previously covered `pd.read_csv`, separate the target from predictors, and keep train/test feature columns aligned.
+
+## Lecture 17 — Optimization, PCA, and K-means clustering
+
+### Imports and dataset attributes
+
+```python
+from sklearn.decomposition import PCA
+from sklearn.datasets import load_breast_cancer
+from sklearn.cluster import MiniBatchKMeans  # Imported only; supplemental example below.
+import seaborn as sns
+import faiss
+
+cancer = load_breast_cancer()
+X, y = cancer.data, cancer.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+print(X_train.shape)
+print(X_test.shape)
+cancer.feature_names
+```
+
+`load_breast_cancer()` returns a dataset container: `.data` is the numeric feature array, `.target` holds labels, and `.feature_names` gives the feature names. The label mapping is **0 = malignant, 1 = benign**; `.target_names` is a supplemental way to check it. With both split sizes omitted, `train_test_split` reserves 25% for testing; `random_state=0` fixes the split. See [dataset documentation](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html).
+
+The repeated imports `fetch_ucirepo`, `SVC`, `cross_val_score`, `GridSearchCV`, `confusion_matrix`, `ConfusionMatrixDisplay`, `cross_validate`, and `get_scorer_names` are not called here; their uses are covered in Lectures 14–15. SVC is requested in an exercise.
+
+### Optimization concepts
+
+Gradient descent updates parameters by `theta_new = theta_old - learning_rate * gradient(loss)`. Full-batch descent uses all training observations per update; stochastic gradient descent uses one, and mini-batch methods use a subset. Smaller updates can be slow; overly large updates can overshoot. Noisy updates can help exploration but guarantee neither escape from poor solutions nor a global optimum.
+
+Setting a derivative to zero identifies a stationary point in a differentiable unconstrained problem, not necessarily a minimum. More iterations give an algorithm more opportunity to converge, but the notebook's proposed inverse relationship between runtime and accuracy is not a general law. Iterative optimization can stop before its iteration limit, and more computation need not improve test performance.
+
+### Fit PCA and compute component scores
+
+```python
+pca = PCA(n_components=3)
+pca.fit(X_train)
+factor_loadings = pd.DataFrame(pca.components_, columns=cancer.feature_names)
+X_pca = pca.transform(X_train)
+
+# Scaling exercise: fit preprocessing and PCA using training rows only.
+scaler_train = preprocessing.StandardScaler().fit(X_train)
+X_train_scale = scaler_train.transform(X_train)
+X_test_scale = scaler_train.transform(X_test)
+pca = PCA(n_components=3)
+pca.fit(X_train_scale)
+factor_loadings = pd.DataFrame(pca.components_, columns=cancer.feature_names)
+X_pca = pca.transform(X_train_scale)
+X_test_pca = pca.transform(X_test_scale)
+```
+
+`PCA(n_components=3)` retains three directions. `.fit()` learns the training mean and directions; `.components_` has shape `(3, n_features)` with one row of weights per component. `.transform()` centers using the learned mean and projects each observation, producing `(n_rows, 3)`. `.fit()` returns the PCA estimator; `.transform()` returns scores. PCA centers automatically but does not standardize feature variances. Scaling changes which features dominate; use the same scaler/PCA on held-out data. See [PCA documentation](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html).
+
+For centered feature matrix `Xc`, scores are `F = Xc @ omega`. The first direction maximizes variance, equivalently the Rayleigh quotient `omega.T @ Xc.T @ Xc @ omega / (omega.T @ omega)`; subsequent directions capture remaining variance while orthogonal to earlier directions. Components' scores are uncorrelated on the fitting data, not necessarily statistically independent. The constraint `sum(omega_j ** 2) = 1` means the **squared weights** sum to one; the weights themselves need not sum to one and may be negative. A component's sign can flip without changing its meaning.
+
+PCA is unsupervised dimensionality reduction: it uses X, not y, and high variance need not be predictive. Fewer components can reduce complexity and discard noise, but can also discard predictive information. There is no guarantee the first two capture most variation; perfectly lower-rank data can even have all variation in one direction. Supplemental diagnostics are `pca.explained_variance_ratio_` and `pca.explained_variance_ratio_.sum()` to inspect retained variance.
+
+### Loadings heatmap and scatterplot formatting
+
+```python
+plt.matshow(pca.components_, cmap="viridis")
+plt.yticks([0, 1, 2], ["First component", "Second component", "Third component"])
+plt.colorbar()
+plt.xticks(range(len(cancer.feature_names)), cancer.feature_names, rotation=60, ha="left")
+plt.xlabel("Feature")
+plt.ylabel("Principal components")
+plt.show()
+
+ax = sns.scatterplot(x=X_pca[:, 0], y=X_pca[:, 1], hue=y_train)
+ax.set(xlabel="First Principal Component", ylabel="Second Principal Component")
+ax.legend(title="Cancer Screening", loc="upper left")
+plt.show()
+```
+
+`plt.matshow` displays the weight matrix as a colored grid; `cmap` selects its color map and `plt.colorbar()` adds the value scale. `plt.yticks(positions, labels)` labels rows; `plt.xticks` labels columns, `rotation=60` tilts text 60 degrees, and `ha="left"` left-aligns it. `range(len(...))` supplies positions. `plt.xlabel`/`ylabel` set axis names and `plt.show()` displays the figure. Color shows signed weight, so a large negative weight can also be a strong contribution.
+
+`X_pca[:, 0]` selects the first component for every row; `[:, 1]` selects the second. `sns.scatterplot(x=..., y=..., hue=...)` colors points by the supplied variable and returns an Axes. `ax.set(xlabel=..., ylabel=..., title=...)` sets plot properties. `ax.legend(title=..., loc=..., labels=[...])` can override legend text, but labels must match the plotted order. The notebook's `labels=["Benign", "Malignant"]` reverses the dataset's numeric order; the example leaves numeric labels intact. Use a mapping from 0/1 to malignant/benign if descriptive labels are desired.
+
+**Notebook clarification:** it fits three components but labels only two heatmap rows and describes `.transform()` as returning two. The heatmap above labels all three; the scatterplot intentionally displays just the first two.
+
+The SVM exercise combines supervised prediction with PCA: fit the scaler and PCA on training data, fit `SVC()` on training component scores and `y_train`, then call `.score(X_test_pca, y_test)` for held-out accuracy. If tuning by CV, use a `Pipeline` containing scaler, PCA, and SVC so each fold fits its own preprocessing (see Lecture 15). PCA and a classifier can be used together; PCA alone does not predict class labels.
+
+### Fit FAISS K-means and assign clusters
+
+```python
+ncentroids = 3
+niter = 100
+verbose = True
+d = X_train.shape[1]
+kmeans = faiss.Kmeans(d, ncentroids, niter=niter, verbose=verbose, seed=0)
+Xtilde = np.float32(X_train)
+kmeans.train(Xtilde)
+results = kmeans.index.search(Xtilde, 1)
+indexes_train = results[1]
+cluster_labels = indexes_train.ravel()
+```
+
+`faiss.Kmeans` creates the clusterer: `d` is feature count, `ncentroids` is K, `niter` limits iterations, `verbose=True` prints progress, and `seed` controls random initialization. `np.float32(X_train)` converts the array to float32; `.train()` learns centroids. `.index.search(Xtilde, 1)` retrieves the nearest **one** centroid for each row, returning `(squared_distances, centroid_indices)`, both shaped `(n_rows, 1)`. Thus `results[1]` is membership, not distance; `.ravel()` flattens it to `(n_rows,)`. IDs run from 0 to K−1 and have no inherent class meaning. Source: [FAISS clustering](https://github.com/facebookresearch/faiss/wiki/Faiss-building-blocks:-clustering,-PCA,-quantization).
+
+The notebook converts training input but passes the original array to `.search()`. Passing the same float32 representation to both is clearer and avoids relying on wrapper conversions. For the scaling exercise:
+
+```python
+Xtilde_scale = np.float32(X_train_scale)
+kmeans.train(Xtilde_scale)
+results_scale = kmeans.index.search(Xtilde_scale, 1)
+indexes_train_scale = results_scale[1]
+cluster_labels = indexes_train_scale.ravel()
+```
+
+Retraining this object replaces its learned centroids; use separate objects if retaining raw and scaled results for comparison. New observations need the training scaler before assignment. Keep the feature count and column order unchanged.
+
+K-means is **unsupervised clustering**, not supervised classification. It alternates nearest-centroid assignment with recomputing each centroid as the mean of assigned points, minimizing within-cluster squared distances. A centroid is a point in feature space, but need not be an observed row. Initialization matters and the result can be a local optimum. Roughly spherical, similarly sized clusters suit this distance-based method; scaling changes distances. Increasing iterations does not guarantee the global optimum or better class prediction.
+
+The notes name the **elbow method** (look for diminishing reduction in within-cluster squared distances as K increases) and **silhouette score** (compare cohesion within a cluster with separation from other clusters) for choosing K. Neither is actually called or plotted in the notebook. Clusters need not correspond to benign/malignant labels, and cluster IDs cannot be directly interpreted as predicted classes.
+
+### Plot clusters in PCA coordinates
+
+```python
+fig, ax = plt.subplots(figsize=(8, 6))
+sns.scatterplot(
+    x=X_pca[:, 0], y=X_pca[:, 1], hue=cluster_labels,
+    palette="viridis", alpha=0.8, ax=ax
+)
+ax.set(xlabel="First Principal Component", ylabel="Second Principal Component",
+       title="K-means Clusters Projected onto PCA")
+ax.legend(title="Cluster")
+plt.show()
+```
+
+`plt.subplots` returns Figure and Axes; `figsize=(8, 6)` gives width and height in inches. `palette` supplies seaborn's hue colors, `alpha=0.8` sets opacity, and `ax=ax` draws into that Axes. Unlike `cmap` in `matshow`, `palette` belongs to seaborn. Points and cluster labels must have identical row order. This is a two-dimensional **view of clusters fitted in the original feature space** (raw or scaled); the displayed plot does not mean K-means was trained on two PCs. Use the PCA fitted on the same chosen representation when comparing plots.
+
+### Imported-only alternative: MiniBatchKMeans
+
+```python
+mini = MiniBatchKMeans(n_clusters=3, random_state=0)
+mini.fit(X_train_scale)
+cluster_labels = mini.labels_
+new_clusters = mini.predict(X_test_scale)
+```
+
+This supplemental example explains the unused import. It uses mini-batches for faster approximate clustering; `n_clusters` is K, `.fit()` returns the estimator, `.labels_` contains training assignments, and `.predict()` assigns new observations. Its API differs from FAISS `.train()`/`.index.search()`. See [MiniBatchKMeans](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.MiniBatchKMeans.html).
 
 ## Imported-only helpers — uses and syntax
 
