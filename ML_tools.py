@@ -1,4 +1,4 @@
-"""MACHINE LEARNING — CLASS LECTURE NOTES (Lectures 10–17)
+"""MACHINE LEARNING — CLASS LECTURE NOTES (Lectures 10–18)
 
 A Python-format reference, not a library of new helper functions.
 These are the class calls, examples, concepts, and formatting from the existing
@@ -14,11 +14,13 @@ ORDER
 1. Linear regression and formula syntax (including tables and manual OLS)
 2. Regression trees, pruning, bagging, forests, and boosting
 3. Cross-validation and expanding windows
-4. Logistic classification and Poisson regression
-5. Scaling, SVM classification, metrics, and tuning
-6. Neural networks
-7. PCA and K-means
-8. Optional panel regression
+4. Pipelines, pipeline cross-validation, and comparing model families
+5. Logistic classification and Poisson regression
+6. Scaling, SVM classification, metrics, and tuning
+7. Neural networks
+8. PCA and K-means
+9. Optional panel regression
+10. Data/simulation/plotting extras and imported-only tools
 
 Regression is included because it provides continuous-outcome models and useful
 baselines. Logistic regression predicts classes; Poisson models a conditional
@@ -26,9 +28,31 @@ mean often used for counts. PCA and clustering use X without known outcomes.
 
 Comments marked correction/supplemental distinguish fixes or exercise syntax
 from literal lecture code. Imported-only APIs are identified as such. New
-helper wrappers and the supplemental Pipeline implementations are omitted.
+helper wrappers are omitted. Pipeline is now taught directly in Lecture 18.
 FUNCTIONS_REFERENCE.md is unchanged and remains the full course-wide catalog.
+
+Coverage audit: November 5, 2026. Reviewed code, comments, Markdown notes, and
+exercises in 16 model-related notebooks: 10a–10d, optional 11e, 12a–12b,
+13a–13b, 14a–14b, 15, 16, both local copies of 17, and 18. Both copies of 17
+are included because the older filename retains additional completed exercises.
+General data/date plotting lessons outside model notebooks remain in the main
+reference. Unrelated scratch content is not part of these modeling notes.
 """
+
+# %% PACKAGES / ENVIRONMENTS — terminal commands, not Python statements
+# Lecture installation commands (run in the environment used by your kernel):
+# pip install statsmodels maketables linearmodels scikit-learn patsy
+# pip install graphviz ISLP ucimlrepo
+# conda install tensorflow
+# conda install -c conda-forge faiss-cpu
+# The core examples also use numpy, pandas, matplotlib; PCA plots use seaborn.
+# /opt/anaconda3/bin/python -m pip install faiss-cpu targets Anaconda specifically.
+# Use the project's .venv-tensorflow kernel for TensorFlow. Packages installed in
+# Anaconda are not automatically installed in that separate environment.
+# Graphviz rendering requires the system dot executable as well as its Python
+# package; the lecture suggests conda install python-graphviz.
+# Import names differ from package names: sklearn comes from scikit-learn;
+# faiss from faiss-cpu. Install only the packages needed for your chosen cells.
 
 # %% COMMON IMPORTS — run only those needed for your chosen example
 import numpy as np
@@ -441,6 +465,131 @@ expanding_mse = np.mean(errors)
 
 
 
+# %% Lecture 18 — Pipes / machine-learning pipelines
+# ============================================================================
+# A pipeline applies ordered processing steps before its final estimator:
+# raw X -> StandardScaler -> PCA -> SVC -> predictions / accuracy.
+# Intermediate steps need fit and transform (or fit_transform); the final step
+# needs fit and, for the scoring examples here, a classifier score method.
+# Names are labels you choose, not output variable names. Each step is a tuple
+# ("name", estimator_object); the steps are enclosed in a list.
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline, make_pipeline
+from sklearn.decomposition import PCA
+from sklearn.linear_model import RidgeClassifier
+from sklearn.datasets import load_breast_cancer
+
+cancer = load_breast_cancer()
+X, y = cancer.data, cancer.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+# Outcome mapping: 0 malignant, 1 benign. Default held-out fraction here is .25.
+
+# %% Lecture 18 — Manual chain: fit on training, transform test with same objects
+scaler = StandardScaler().fit(X_train)
+X_train_star = scaler.transform(X_train)
+pca = PCA(n_components=3).fit(X_train_star)
+X_train_star = pca.transform(X_train_star)
+svm = SVC()
+svm.fit(X_train_star, y_train)
+X_test_star = pca.transform(scaler.transform(X_test))
+svm.score(X_test_star, y_test)
+# Optional prediction call shown in a lecture comment:
+# predictions = svm.predict(X_test_star)
+# The nested call transforms with scaler first, then PCA. Do not fit either
+# object on test rows. The notebook's aside suggesting test fitting is misleading.
+
+# %% Lecture 18 — Named and abbreviated pipelines
+pipe = Pipeline([
+    ("scaler", StandardScaler()),
+    ("pca", PCA(n_components=3)),
+    ("svm", SVC()),
+])
+pipe.fit(X_train, y_train)
+round(pipe.score(X_test, y_test), 4)
+# fit learns the scaler/PCA from these training rows, transforms them, then fits
+# SVC. score accepts RAW test features and applies the fitted transformations.
+# SVC's score is accuracy; round(value,4) changes display precision, not the fit.
+
+pipe_abbreviated = make_pipeline(StandardScaler(), PCA(n_components=3), SVC())
+pipe_abbreviated.fit(X_train, y_train)
+round(pipe_abbreviated.score(X_test, y_test), 4)
+# make_pipeline takes estimator objects as separate arguments, not named tuples.
+# It creates names from lowercased class names: standardscaler, pca, svc here.
+# The lecture exercise compares accuracy of these equivalent configurations.
+
+# Completed exercise from the notebook: omit PCA.
+pipe_noPCA = Pipeline([("scaler", StandardScaler()), ("svm", SVC())])
+pipe_noPCA.fit(X_train, y_train)
+round(pipe_noPCA.score(X_test, y_test), 4)
+# Compression may discard useful information; fewer components need not improve
+# prediction. Comparing configurations repeatedly on the same test set turns it
+# into validation data. Reserve a separate final test when selecting a model.
+
+# %% Lecture 18 — Tune a pipeline with cross-validation
+k_features = 3  # SVC receives three PCA scores, not all original predictors.
+param_grid = {
+    "svm__C": [0.01, 0.1],
+    "svm__gamma": [0.01 / k_features, 0.1 / k_features],
+}
+grid = GridSearchCV(pipe, param_grid, cv=2, return_train_score=True, n_jobs=-1)
+grid.fit(X_train, y_train)
+print("Best estimator:\n{}".format(grid.best_estimator_))
+grid.score(X_test, y_test)
+# Parameter syntax is step_name__parameter (TWO underscores). Four combinations
+# times two folds = eight CV fits, plus a refit of the winning pipeline.
+# cv=2 for this classifier uses stratified folds by default. Each training fold
+# learns its OWN scaler and PCA; the validation fold is transformed with those
+# fitted objects. Pass raw training data to grid.fit, not globally scaled data.
+# return_train_score=True records training scores; n_jobs=-1 uses available CPUs.
+# Default scoring uses SVC accuracy. best_estimator_ is the whole fitted pipeline.
+# The string's \n inserts a newline; {} is replaced by .format(...).
+# CORRECTION: make_pipeline DOES support grid search. For pipe_abbreviated the
+# keys would be svc__C and svc__gamma, since its automatic final name is svc.
+# Automatic names can still be referenced; manual names make them easier to read.
+# Source: https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html
+
+# Leakage means information unavailable at training/prediction time enters the
+# fit. A pipeline prevents preprocessing leakage only when fitting is done on
+# appropriate training rows. It does not fix future-valued predictors, poor time
+# splits, or using the test set to pick hyperparameters. Time-series prediction
+# must use past information to predict later outcomes, never future X for past y.
+
+# %% Lecture 18 — Compare classifier families and optional preprocessing
+pipe_multimodel = Pipeline([
+    ("preprocessing", StandardScaler()),
+    ("classifier", SVC()),
+])
+param_grid = [
+    {
+        "classifier": [SVC()],
+        "preprocessing": [StandardScaler(), None],
+        "classifier__C": [0.01, 0.1],
+    },
+    {
+        "classifier": [RidgeClassifier()],
+        "preprocessing": [StandardScaler(), None],
+    },
+]
+grid = GridSearchCV(pipe_multimodel, param_grid, cv=2,
+                    return_train_score=True, n_jobs=-1)
+grid.fit(X_train, y_train)
+print("Best estimator:\n{}".format(grid.best_estimator_))
+print(grid.score(X_test, y_test))
+# A LIST of dictionaries defines separate search spaces. Each dictionary uses
+# its own Cartesian product; classifier__C applies only to the SVC branch.
+# The step key classifier replaces the whole estimator; preprocessing=None
+# skips that intermediate step. Four SVC configurations + two ridge = six.
+# With two folds there are 12 CV fits plus the winning pipeline's refit.
+# RidgeClassifier is a linear classifier fitted with an L2-penalized squared-loss
+# formulation, distinct from logistic regression. It predicts classes, not a
+# continuous regression target. Larger alpha strengthens its regularization;
+# the lecture uses RidgeClassifier() defaults and does not tune alpha.
+# Source: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeClassifier.html
+# Exercises (blank in notebook): cross-validate decision trees over pruning
+# penalties. Reuse cost_complexity_pruning_path/ccp_alpha and GridSearchCV from
+# Lecture 13. For this cancer outcome choose a classifier, not DTR with MSE;
+# for the earlier continuous-outcome exercise use the regression-tree version.
+
 # %% Lecture 12 — Logistic classification and Poisson regression (12a–12b)
 # ============================================================================
 
@@ -678,7 +827,8 @@ list_scorers = pd.DataFrame(get_scorer_names())
 # `score_time`, which are seconds, not performance measures.
 
 # Correction: scaling before CV leaks held-out-fold information. Fit the scaler within each
-# training fold; the supplemental Pipeline implementation remains in FUNCTIONS_REFERENCE.md.
+# training fold; see the Lecture 18 Pipeline + GridSearchCV cells above for the
+# class-taught solution using raw inputs and a scaler inside the pipeline.
 
 
 # %% Manual tuning, dictionaries, and string formatting
@@ -912,7 +1062,7 @@ plt.show()
 
 from sklearn.decomposition import PCA
 from sklearn.datasets import load_breast_cancer
-from sklearn.cluster import MiniBatchKMeans  # Imported only; supplemental example below.
+from sklearn.cluster import MiniBatchKMeans  # Imported only; see the import notes at the end.
 import seaborn as sns
 import faiss
 
@@ -1152,3 +1302,129 @@ print(fixed_results.summary)            # Property here, unlike statsmodels' .su
 # covariance permits within-entity error dependence. Unlike statsmodels formulas, these
 # linearmodels formulas need an explicit `1 +` if an intercept is wanted; first-difference
 # models must not contain a constant.
+
+
+# %% Data, simulations, and regression plots — Lecture 10a–10d extras
+# ============================================================================
+# These supporting calls appear in model lectures even though they do not fit
+# models themselves. Examples are separate cells; dataset names are placeholders.
+dataset = pd.DataFrame()
+n = 100
+np.random.seed(42)
+dataset["x"] = np.random.normal(loc=0, scale=1, size=n)
+dataset["z"] = np.random.normal(loc=0, scale=1, size=n)
+dataset["e"] = np.random.normal(loc=0, scale=1, size=n)
+dataset["d"] = np.random.choice(a=[1, 2, 3], size=n, p=[0.2, 0.2, 0.6])
+dataset["z with spaces"] = dataset["z"]
+dataset["y"] = 1 + 2 * dataset["x"] + dataset["e"]
+# seed fixes NumPy's random sequence. normal: loc=mean, scale=standard deviation,
+# size=draw count. choice: a=possible values; p=probabilities (sum to 1).
+# The heteroskedastic lecture example instead uses 2+5*x+x*e: error size varies
+# with x. A seed affects simulated draws, not the statistical model specification.
+
+subset_above2 = dataset.query("y >= 2")
+ybar = np.mean(subset_above2["y"])
+stdv_sample = np.std(subset_above2["y"])
+subset_above2.query("abs(y - @ybar) <= @stdv_sample")
+print(f"Proportion above threshold: {round(len(subset_above2) / len(dataset), 3)}")
+# @ accesses a Python variable inside query; abs makes the interval two-sided.
+# CORRECTION: the exercise code omits abs, giving only a one-sided bound.
+# np.std defaults to ddof=0 (population denominator n), despite the notebook's
+# variable name stdv_sample. pandas describe()['std'] uses sample ddof=1.
+# f-strings substitute expressions inside braces; \n creates a new line.
+
+results = smf.ols("y ~ x", data=dataset).fit(cov_type="HC1")
+dataset["p_estimated"] = results.params["Intercept"] + results.params["x"] * dataset["x"]
+plt.scatter(x=dataset["x"], y=dataset["y"], color="black")
+plt.plot(dataset["x"], dataset["p_estimated"], color="green")
+plt.xlabel("X Variable")
+plt.ylabel("Y Variable")
+plt.legend(labels=["Data points", "Estimated Predicted Model"])
+plt.show()
+# scatter gives points; plot connects values in supplied row order. Sort x when
+# drawing a continuous fitted line. Legend labels must follow plotted artist order.
+dataset["sample_error"] = dataset["y"] - dataset["p_estimated"]
+dataset["error_sqr"] = dataset["sample_error"] ** 2
+mean_sq_error = np.mean(dataset["error_sqr"])
+# Lecture 10a defines fn_positive_error = lambda error: error >= 0 and calls it
+# on dataset['sample_error']. This is an elementwise nonnegative-error flag; zero
+# counts as True. Its use is documented here without adding another helper.
+display(dataset[["sample_error", "error_sqr"]])
+# This is training residual MSE; don't present it as held-out prediction error.
+
+# %% Experimental data / custom OLS inspection — Lecture 10c–10d
+# Run relative to the lecture folder, or replace paths with project-relative ones.
+dataset = pd.read_stata("data_raw/malawiexperiment.dta")
+unique_ids = pd.unique(dataset["hhid"])
+len(unique_ids)
+pd.crosstab(index=dataset["treat"], columns="count")
+dataset_treated = dataset.query('treat == "Treatment"')
+dataset_control = dataset.query('treat == "Control"')
+variables_respondent = ["lit", "primary_resp_fem", "age_par1", "farmer"]
+display(dataset_treated[variables_respondent].describe().loc[["mean", "std"]])
+display(dataset_control[variables_respondent].describe().loc[["mean", "std"]])
+# read_stata reads .dta files; read_csv reads the lecture .csv files. unique returns
+# distinct values; len(unique_ids) counts households. crosstab gives category counts.
+# describe summarizes selected columns; .loc selects named summary rows.
+# Lecture formulas: 'lit ~ treat' checks baseline balance; 'u_ave ~ treat' models
+# the outcome; '+ ave' adjusts for baseline; 'treat * ave' adds heterogeneous effects.
+# Treat causal interpretations separately from prediction accuracy.
+
+# Lecture 10d's custom objects must first be defined using that notebook:
+# compute_ols(X, y)                      # returns beta, intercept first
+# regression_model = OrdinaryLeastSquares(X, y)
+# regression_model.Xtrain.head(2)        # first two predictor rows
+# regression_model.ytrain.head(1)        # first target row
+# regression_model.fit()                # returns self; then attributes exist
+# regression_model.beta
+# regression_model.coefficients
+# regression_model.intercept
+# predictions = regression_model.predict(X)
+# plt.hist(x=predictions)
+# CORRECTION: reading .beta before .fit(), as one notebook cell does, fails.
+# These are the lecture's own definitions, not a new ML_tools implementation.
+
+# %% Probability and outcome histograms — Lecture 12a–12b
+# Requires fitted binary classifier and matching X_test.
+mat_probabilities = pd.DataFrame(classifier.predict_proba(X_test))
+vec_probabilities = mat_probabilities.iloc[:, 1]
+plt.hist(x=vec_probabilities, bins=15)
+plt.xlabel("Predicted Probability")
+plt.ylabel("Frequency")
+plt.title("Predicted Probabilities on Test Set")
+plt.show()
+# iloc[:,1] selects the second probability column by position; check classes_.
+# bins is the number of histogram intervals, not a prediction threshold.
+
+dataset = pd.read_stata("data_raw/nlswork.dta")
+plt.hist(x=dataset["wage"], bins=50)
+plt.ylabel("Frequency")
+plt.xlabel("Wage")
+plt.title("Histogram of wages")
+plt.show()
+plt.scatter(x=dataset["age"], y=dataset["wage"])
+plt.xlabel("Age")
+plt.ylabel("Wage")
+plt.title("Scatter of wages by age")
+plt.show()
+# CORRECTION: label x as Age and y as Wage to match the scatter arguments.
+
+# %% Imported-only packages and extras — no worked calls in these lectures
+# ============================================================================
+# Keep the actual import syntax and purpose without inventing additional models.
+from linearmodels.datasets import mroz
+from linearmodels.iv import IV2SLS
+from statsmodels.iolib.summary2 import summary_col
+from sklearn.metrics import classification_report
+from sklearn.model_selection import ShuffleSplit
+from ISLP.models import summarize
+from sklearn.cluster import MiniBatchKMeans
+# mroz: example labor-supply dataset; IV2SLS: instrumental-variables estimation.
+# summary_col: side-by-side statsmodels summaries; summarize: ISLP coefficient
+# table helper. classification_report: classwise precision/recall/F1/support.
+# ShuffleSplit: repeated random holdouts that can overlap; it is not KFold.
+# MiniBatchKMeans: minibatch clustering alternative to FAISS (imported in 17/18).
+# These appear in imports; their presence does not mean a model was estimated.
+# The course also imports cross_val_score, get_scorer_names, confusion-matrix
+# tools, and fetch_ucirepo in notebooks where they are not called. Their worked
+# uses or explicitly labeled syntax examples appear in the corresponding sections.
