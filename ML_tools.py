@@ -1,4 +1,4 @@
-"""MACHINE LEARNING — CLASS LECTURE NOTES (Lectures 10–18)
+"""MACHINE LEARNING — CLASS LECTURE NOTES (Lectures 10–19)
 
 A Python-format reference, not a library of new helper functions.
 These are the class calls, examples, concepts, and formatting from the existing
@@ -21,6 +21,7 @@ ORDER
 8. PCA and K-means
 9. Optional panel regression
 10. Data/simulation/plotting extras and imported-only tools
+11. Text analysis: bag of words, stop words, truncated SVD, rating prediction
 
 Regression is included because it provides continuous-outcome models and useful
 baselines. Logistic regression predicts classes; Poisson models a conditional
@@ -37,6 +38,8 @@ exercises in 16 model-related notebooks: 10a–10d, optional 11e, 12a–12b,
 are included because the older filename retains additional completed exercises.
 General data/date plotting lessons outside model notebooks remain in the main
 reference. Unrelated scratch content is not part of these modeling notes.
+Lecture 19 added November 10, 2026 (17 model-related notebooks total). Its
+internal title says Lecture 20; this reference follows the Lecture 19 folder.
 """
 
 # %% PACKAGES / ENVIRONMENTS — terminal commands, not Python statements
@@ -1428,3 +1431,140 @@ from sklearn.cluster import MiniBatchKMeans
 # The course also imports cross_val_score, get_scorer_names, confusion-matrix
 # tools, and fetch_ucirepo in notebooks where they are not called. Their worked
 # uses or explicitly labeled syntax examples appear in the corresponding sections.
+
+
+# %% Lecture 19 — Text analysis: packages and review data
+# ============================================================================
+# Fits here because text is converted into numeric features for dimensionality
+# reduction and supervised rating prediction. No new helper functions are needed.
+from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
+from sklearn.decomposition import TruncatedSVD
+from sklearn.model_selection import train_test_split
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+# Also imported in the lecture, but never called there:
+# from sklearn.cluster import MiniBatchKMeans
+# import faiss
+# CountVectorizer/TruncatedSVD are part of the existing scikit-learn package.
+
+# Path below is relative to the project root; the lecture uses data_raw/... when
+# running inside its own folder. The data source is the Amazon reviews CSV.
+data = pd.read_csv("Lecture 19/data_raw/amazon_reviews.csv")
+len(data)
+data.columns
+reviews = data["reviews.text"]
+plt.hist(x=data["reviews.rating"])
+missing_values = data["reviews.rating"].isnull().sum()
+percent_missing = missing_values / len(data)
+print(percent_missing)
+data_nonmissing = data[data["reviews.rating"].notnull()]
+# isnull gives a Boolean mask; sum counts True values. Dividing by len gives a
+# fraction, not a number already multiplied by 100. notnull selects known labels.
+# The lecture reports about 26% missing ratings; recompute for the current data.
+# Removing missing labels can select a systematically different set of reviews.
+# Text must also be nonmissing strings: filtering ratings alone does not ensure
+# this. Supplemental input correction if text is missing:
+# data_nonmissing = data_nonmissing[data_nonmissing["reviews.text"].notnull()]
+# reviews = reviews[reviews.notnull()]
+# Keep text and labels aligned by filtering the same DataFrame before splitting.
+
+# %% Lecture 19 — Stop words and bag-of-words features
+list(ENGLISH_STOP_WORDS)[0:10]
+custom_stop_words = list(ENGLISH_STOP_WORDS) + ["python"]
+# The lecture adds "Python". CORRECTION: lowercase it because CountVectorizer
+# lowercases text by default; otherwise that stop word will not match "python".
+# Alternative shown in a lecture comment: custom_stop_words = ["and", "or", "how"]
+# ENGLISH_STOP_WORDS is a set-like collection; the first ten after list(...) have
+# no linguistic ranking or guaranteed order. Stop words remove common words;
+# choose them carefully because even common words may carry sentiment meaning.
+
+word_model = CountVectorizer(min_df=1, stop_words=custom_stop_words)
+word_model.fit(reviews)
+vocabulary = word_model.vocabulary_
+vocabulary_table = pd.DataFrame(vocabulary.items(), columns=["Word", "Column index"])
+vocabulary_table.sort_values(by="Column index", ascending=False)
+# fit learns the vocabulary; vocabulary_ maps word -> feature-column index.
+# CORRECTION: the lecture calls this second column "Frequency", but these are
+# indices, not counts. Sorting this table does not identify the most common words.
+# min_df=3 means presence in at least THREE DOCUMENTS, not three total mentions.
+# min_df=1 retains words occurring in at least one document. Raising it removes
+# rarer words and can leave an empty vocabulary on a small training sample.
+
+X = word_model.transform(reviews)
+np.shape(X)
+# Each row is a review, each column a learned token. The matrix is sparse:
+# zeros are not stored explicitly. Bag of words ignores word order.
+# CORRECTION: default entries are occurrence COUNTS, not {0,1} indicators.
+# binary=True would request indicators; that option is not used in the lecture.
+# CORRECTION: pd.DataFrame(X), as written in the notebook, does not reliably
+# give a usable word-column table from a scipy sparse matrix. Supplemental fix:
+X_dataframe = pd.DataFrame.sparse.from_spmatrix(
+    X, columns=word_model.get_feature_names_out(), index=reviews.index
+)
+# Keep it sparse; converting a large review vocabulary to a dense table can be
+# expensive. To answer the lecture's "most common words" exercise, count tokens:
+word_counts = pd.Series(
+    np.asarray(X.sum(axis=0)).ravel(), index=word_model.get_feature_names_out()
+).sort_values(ascending=False)
+# The two calls above are explicitly supplemental corrections, not new helpers.
+# Exercise: repeat for data["reviews.title"], the verified local CSV column.
+# CORRECTION: the lecture prose's singular "review.title" is not that column name.
+# Source: https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html
+
+# %% Lecture 19 — Split text before learning the vocabulary
+text = data_nonmissing["reviews.text"]
+y = data_nonmissing["reviews.rating"]
+text_train, text_test, y_train, y_test = train_test_split(text, y, random_state=0)
+word_model_train = CountVectorizer(min_df=1, stop_words=custom_stop_words)
+word_model_train.fit(text_train)
+X_train = word_model_train.transform(text_train)
+X_test = word_model_train.transform(text_test)
+np.shape(X_train)
+# CORRECTION: the notebook fits word_model_train but then transforms using the
+# older full-data word_model, leaking vocabulary information from held-out rows.
+# Use word_model_train for BOTH sets. Columns then match; unseen test words are
+# ignored. Check X_train's shape here, not the unrelated full-corpus X.
+# Whole-corpus vocabulary exploration above is descriptive; don't use it to tune
+# a predictor intended to have an untouched test-set evaluation.
+
+# %% Lecture 19 — Truncated SVD for sparse text
+svd = TruncatedSVD(n_components=3, random_state=42)
+svd.fit(X_train)
+X_svd_train = svd.transform(X_train)
+X_svd_test = svd.transform(X_test)
+np.shape(X_svd_train)
+# n_components selects the reduced dimensions; random_state fixes randomized
+# aspects of fitting. Fit on training rows and transform test with the same SVD.
+# Unlike PCA, TruncatedSVD does not center its inputs, which makes it suitable for
+# sparse count matrices. Its reduced output is dense. This is not restricted to
+# binary text features. Choose feasible components for the available matrix size.
+# Source: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.TruncatedSVD.html
+
+ax = sns.scatterplot(x=X_svd_train[:, 0], y=y_train)
+ax.set(xlabel="First SVD component", ylabel="Review rating")
+# [:,0] selects the first component for every training row. CORRECTION: the
+# lecture labels y as a second principal component, but actually plots ratings.
+# No hue is supplied, despite the notebook comment mentioning hue.
+
+# %% Lecture 19 — Rating-prediction exercises (original solution cells are blank)
+# 1. Build a pipeline: CountVectorizer -> TruncatedSVD -> support-vector REGRESSION.
+#    Required estimator for this named exercise: from sklearn.svm import SVR.
+#    SVC from earlier lectures classifies; SVR predicts a numeric rating.
+#    Use Pipeline syntax from Lecture 18; pass raw text into the pipeline so
+#    vocabulary and SVD are learned within training folds during CV.
+# 2. Evaluate held-out predictions against y_test using regression error such as
+#    np.mean((np.ravel(y_test) - np.ravel(predictions)) ** 2).
+#    An SVR's .score is R², not classification accuracy. Predicted ratings can be
+#    fractional and need not stay within the observed rating scale.
+# 3. Predict ratings for data[data['reviews.rating'].isnull()] using available
+#    review text and the already fitted transformations/model. These are estimates,
+#    not observed labels; missing-label rows cannot provide measured accuracy.
+# 4. Compare predicted missing-review ratings with observed ratings, keeping their
+#    different status clear. Differences may reflect missingness/selection and
+#    model error, rather than the true missing-rating distribution alone.
+# 5. Vary min_df and n_components using training CV. In a named pipeline, keys
+#    use step_name__min_df and step_name__n_components (Lecture 18 syntax).
+# The exercise describes these tasks but does not supply a fitted regression
+# pipeline. No extra implementation or custom function is invented here.
