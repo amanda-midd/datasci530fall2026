@@ -98,6 +98,9 @@ Try it yourself!
 -- Make sure to deparate arguments by a semicolon!
 
 
+INSERT INTO drivers VALUES (5,'Oscar Piastri','Australian',403)
+
+INSERT INTO drivers VALUES (8, 'Whitney Barr','American',1)
 
 
 
