@@ -1,5 +1,5 @@
 -- SQLBook: Markup
-# <span style="color:darkblue"> Lecture 20 - Introduction to SQL </span>
+# <span style="color:blue"> Lecture 20 - Introduction to SQL </span>
 
 <font size = "5">
 
@@ -9,7 +9,7 @@ SQL is a language specializing in database management
 - Typical task is to extract data from server
 - Many concepts are similar to Python
 -- SQLBook: Markup
-# <span style="color:darkblue"> I. Connect to Local Server </span>
+# <span style="color:blue"> I. Connect to Local Server </span>
 
 <font size="5"> 
 
@@ -27,7 +27,7 @@ panel on the left:
 - In each code chunk you will see a button that says <br>
 "Active Connection". Select that to run the code
 -- SQLBook: Markup
-# <span style="color:darkblue"> II. Create SQL Table from Scratch </span>
+# <span style="color:blue"> II. Create SQL Table from Scratch </span>
 -- SQLBook: Markup
 <font size = "5">
 
@@ -108,7 +108,7 @@ INSERT INTO drivers  VALUES (19, 'Elmo', 'Colombian', 21);
 INSERT INTO drivers  VALUES (67, 'Jack the Ripper', 'British', 15);
 
 -- SQLBook: Markup
-# <span style="color:darkblue"> II. Dataset Operations </span>
+# <span style="color:blue"> II. Dataset Operations </span>
 
 
 <font size="5"> 
@@ -198,7 +198,7 @@ SELECT nationality, driver_id FROM drivers
 WHERE victories > 60;
 
 -- SQLBook: Markup
-# <span style="color:darkblue"> III. Groupby + Chaining </span>
+# <span style="color:blue"> III. Groupby + Chaining </span>
 
 <font size="5"> 
 
@@ -270,7 +270,7 @@ HAVING MAX(victories) <= 71;
 
 
 -- SQLBook: Markup
-# <span style="color:darkblue"> IV. Merging </span>
+# <span style="color:blue"> IV. Merging </span>
 
 <font size="5"> 
 
@@ -306,7 +306,7 @@ FROM drivers
 LEFT JOIN countries
 ON drivers.nationality = countries.nationality
 -- SQLBook: Markup
-# <span style="color:darkblue"> V. Learning more </span>
+# <span style="color:blue"> V. Learning more </span>
 
 <font size = "5">
 
