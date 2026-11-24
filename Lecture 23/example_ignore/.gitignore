@@ -1,0 +1,14 @@
+*.zip
+*.tar.gz
+*.feather
+
+subfolder/*.aux
+subfolder/*.log
+subfolder/*.bbl
+subfolder/*.blg
+subfolder/*.out
+subfolder/*.synctex.gz
+subfolder/*.fdb_latexmk
+subfolder/*.fls
+
+
